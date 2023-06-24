@@ -1,4 +1,4 @@
-import { GPTSlot } from '../../../../../../index';
+import { GPTSlot } from '../../../../../index';
 
 const DisplayTestAd = () => {
   return (

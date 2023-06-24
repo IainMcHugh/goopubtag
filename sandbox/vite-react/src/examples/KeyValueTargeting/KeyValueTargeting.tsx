@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { GPTSlot, useGPT } from '../../../../../../index';
+import { GPTSlot, useGPT } from '../../../../../index';
 
 const KeyValueTargeting = () => {
   const [toggle, setToggle] = useState(false);

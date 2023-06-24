@@ -1,4 +1,4 @@
-import { GPTProvider } from '../../../../index';
+import { GPTProvider } from '../../../index';
 import { DisplayTestAd } from './examples/DisplayTestAd/DisplayTestAd';
 import { KeyValueTargeting } from './examples/KeyValueTargeting/KeyValueTargeting';
 

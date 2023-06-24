@@ -13,9 +13,9 @@
     "lint": "tsc",
     "test": "vitest",
     "test:coverage": "vitest run --coverage && open coverage/index.html",
-    "sandbox:vite:dev": "vite sandbox/react/my-react-ts-app --c sandbox/react/my-react-ts-app/vite.config.ts",
-    "sandbox:vite:build": "vite build sandbox/react/my-react-ts-app --c sandbox/react/my-react-ts-app/vite.config.ts",
-    "sandbox:vite:start": "vite preview sandbox/react/my-react-ts-app --port 8080 --c sandbox/react/my-react-ts-app/vite.config.ts"
+    "sandbox:vite:dev": "vite sandbox/vite-react --c sandbox/vite-react/vite.config.ts",
+    "sandbox:vite:build": "vite build sandbox/vite-react --c sandbox/vite-react/vite.config.ts",
+    "sandbox:vite:start": "vite preview sandbox/vite-react --port 8080 --c sandbox/vite-react/vite.config.ts"
   },
   "keywords": [],
   "author": "Iain McHugh",
