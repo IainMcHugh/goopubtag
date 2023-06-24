@@ -7,12 +7,12 @@ import { GPTDev } from '../components/GPTDev';
 const GPTContext = createContext<GPTContext>({} as GPTContext);
 
 const GPTProvider = (props: GPTProviderProps) => {
-  const { children, ...GPT } = props;
-  const { isLoaded } = useGPTProviderInternal(GPT);
+  const { children, ...gpt } = props;
+  const rest = useGPTProviderInternal(gpt);
   return (
-    <GPTContext.Provider value={{ ...GPT, isLoaded }}>
+    <GPTContext.Provider value={{ ...gpt, ...rest }}>
       {children}
-      {GPT.debug && <GPTDev />}
+      {gpt.debug && <GPTDev />}
     </GPTContext.Provider>
   );
 };

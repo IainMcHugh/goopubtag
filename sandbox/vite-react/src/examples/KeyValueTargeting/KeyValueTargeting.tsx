@@ -2,8 +2,14 @@ import { useEffect, useState } from 'react';
 import { GPTSlot, useGPT } from '../../../../../index';
 
 const KeyValueTargeting = () => {
-  const [toggle, setToggle] = useState(false);
-  const { setTargetingAttributes, clearTargetingAttributes } = useGPT();
+  const [toggle, setToggle] = useState(true);
+  const {
+    setTargetingAttributes,
+    setPageTargetingAttributes,
+    clearTargetingAttributes,
+    clearPageTargetingAttributes,
+    refresh,
+  } = useGPT();
 
   const handleClick = () => {
     setToggle((prevToggle) => !prevToggle);
@@ -11,10 +17,13 @@ const KeyValueTargeting = () => {
 
   useEffect(() => {
     if (toggle) {
-      setTargetingAttributes('banner-ad-1', { color: 'blue' });
+      setPageTargetingAttributes({ interests: 'basketball' });
+      setTargetingAttributes('banner-ad-1', { color: 'red' });
     } else {
+      clearPageTargetingAttributes();
       clearTargetingAttributes('banner-ad-1', ['color']);
     }
+    refresh();
   }, [toggle]);
   return (
     <div>

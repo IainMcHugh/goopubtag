@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 
-import type { SlotProvider } from '../types';
+import type { SlotProvider, Unit } from '../types';
 import { getGPTScript } from '../utils';
 
 const useGPTProviderInternal = (props: SlotProvider) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [units, setUnits] = useState<Unit[]>([]);
   const { limitedAds = false, targetingArguments } = props;
+
+  const addUnit = (unit: Unit) => setUnits((prev) => [...prev, unit]);
 
   useEffect(() => {
     const gptScript = getGPTScript({ limitedAds });
@@ -29,6 +32,8 @@ const useGPTProviderInternal = (props: SlotProvider) => {
 
   return {
     isLoaded,
+    addUnit,
+    units,
   };
 };
 

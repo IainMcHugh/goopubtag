@@ -12,6 +12,11 @@ type SizeMapping = {
   sizes: Size[];
 };
 
+export type Unit = {
+  slotId: string;
+  unit: any;
+};
+
 type LazyLoad = {
   // Fetch slots within 5 viewports.
   fetchMarginPercent: number;
@@ -103,6 +108,8 @@ type SharedContextProps = SlotProvider & {
 };
 export type GPTContext = SharedContextProps & {
   isLoaded: boolean;
+  addUnit: (unit: Unit) => void;
+  units: Unit[];
 };
 export type GPTProviderProps = SharedContextProps & {
   children: ReactNode;
@@ -118,5 +125,7 @@ export type UseGPTProps = {};
 export type UseGPT = {
   refresh: (adSlots?: string[]) => void;
   setTargetingAttributes: (slotId: string, attributes: Attributes) => void;
-  clearTargetingAttributes: (slotId: string, attributes: string[]) => void;
+  setPageTargetingAttributes: (attributes: Attributes) => void;
+  clearTargetingAttributes: (slotId: string, attributes?: string[]) => void;
+  clearPageTargetingAttributes: (attributes?: string[]) => void;
 };
