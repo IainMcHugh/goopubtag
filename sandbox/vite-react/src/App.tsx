@@ -1,28 +1,26 @@
-import { GPTProvider } from '../../../index';
-import { DisplayTestAd } from './examples/DisplayTestAd/DisplayTestAd';
-import { KeyValueTargeting } from './examples/KeyValueTargeting/KeyValueTargeting';
+import { Link } from 'react-router-dom';
 
 function App() {
   return (
-    <GPTProvider
-      networkId={6355419}
-      targetingArguments={{ interests: 'basketball' }}
-      debug={true}
-    >
+    <div>
       <h1>Welcome to GPT React </h1>
       <h2>
         The following examples correspond to Google Publisher Tag examples
-        listed{' '}
-        <a href="https://github.com/googleads/google-publisher-tag-samples">
-          here
-        </a>
+        listed
       </h2>
+      <a href="https://github.com/googleads/google-publisher-tag-samples">
+        here
+      </a>
       <div>
-        <DisplayTestAd />
+        <Link to={'/examples/display-test-ad'}>Display test ad</Link>
         <br />
-        <KeyValueTargeting />
+        <Link to={'/examples/key-value-targeting'}>Key value targeting</Link>
+        <br />
+        <Link to={'/examples/refresh'}>Refresh</Link>
+        <br />
+        <Link to={'/examples/ad-sizes'}>Ad sizes</Link>
       </div>
-    </GPTProvider>
+    </div>
   );
 }
 

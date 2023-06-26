@@ -1,6 +1,14 @@
-import { GPTSlot, useGPT } from '../../../../../index';
+import { GPTProvider, GPTSlot, useGPT } from '../../../../../index';
 
 const Refresh = () => {
+  return (
+    <GPTProvider networkId={6355419} debug={true}>
+      <Component />
+    </GPTProvider>
+  );
+};
+
+const Component = () => {
   const { refresh } = useGPT();
 
   const handleClick = () => {

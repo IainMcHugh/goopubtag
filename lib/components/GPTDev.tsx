@@ -1,3 +1,5 @@
+import { GooPubTagIcon } from './GPTDevIcon';
+
 const GPTDev = () => {
   const openConsole = () => {
     window.googletag?.openConsole();
@@ -7,16 +9,17 @@ const GPTDev = () => {
     <div
       style={{
         position: 'absolute',
-        bottom: '24px',
-        right: '24px',
-        width: '48px',
-        height: '48px',
-        padding: '16px',
-        backgroundColor: 'rebeccapurple',
+        bottom: '8px',
+        right: '8px',
+        width: '56px',
+        height: '56px',
+        padding: '4px 4px 0px 4px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: '12px',
+        border: '1px dotted rebeccapurple',
+        backgroundColor: '#66339933',
       }}
     >
       <button
@@ -28,7 +31,7 @@ const GPTDev = () => {
           cursor: 'pointer',
         }}
       >
-        Open GPT console
+        <GooPubTagIcon />
       </button>
     </div>
   );

@@ -1,7 +1,19 @@
 import { useEffect, useState } from 'react';
-import { GPTSlot, useGPT } from '../../../../../index';
+import { GPTProvider, GPTSlot, useGPT } from '../../../../../index';
 
 const KeyValueTargeting = () => {
+  return (
+    <GPTProvider
+      networkId={6355419}
+      targetingArguments={{ interests: 'basketball' }}
+      debug={true}
+    >
+      <Component />
+    </GPTProvider>
+  );
+};
+
+const Component = () => {
   const [toggle, setToggle] = useState(true);
   const {
     setTargetingAttributes,
