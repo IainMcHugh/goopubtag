@@ -1,4 +1,4 @@
-import { GPT_SCRIPT_SRC } from '../constants';
+import { GPT_SCRIPT_SRC } from '../constants/script';
 
 const getSrc = (limitedAds: boolean) => {
   if (limitedAds) return GPT_SCRIPT_SRC.LIMITED_ADS;

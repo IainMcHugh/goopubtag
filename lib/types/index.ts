@@ -2,14 +2,16 @@ import type { ReactNode } from 'react';
 
 /** GPT types
  * - reference: https://developers.google.com/publisher-tag/reference
+ * - Definitely typed: https://www.npmjs.com/package/@types/google-publisher-tag
  */
 export type Attributes = { [key: string]: string };
 
-type Size = [number, number];
+type Size = readonly [number, number];
+type Sizes = string | Size | Size[];
 
 type SizeMapping = {
   viewport: Size;
-  sizes: Size[];
+  sizes: Sizes;
 };
 
 export type Unit = {
@@ -74,7 +76,7 @@ type SlotViewableEvent = Event<SlotVisibilityChangedEvent>;
 
 export type GPT = {
   adUnit?: string;
-  sizeMapping?: SizeMapping;
+  sizeMapping?: SizeMapping[];
   adSenseAttributes?: Attributes;
   targetingArguments?: Attributes;
 };
@@ -94,7 +96,7 @@ export type SlotProvider = GPT & {
 export type SlotUnit = GPT & {
   networkId?: string;
   slotId: string;
-  sizes: Size | string;
+  sizes: Sizes;
   onSlotRender?: (event: SlotRenderEvent) => void;
   onSlotIsViewable?: (event: SlotViewableEvent) => void;
   renderOutOfThePage?: boolean;

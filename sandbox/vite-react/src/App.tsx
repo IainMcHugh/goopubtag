@@ -12,13 +12,21 @@ function App() {
         here
       </a>
       <div>
-        <Link to={'/examples/display-test-ad'}>Display test ad</Link>
+        <Link to={'/examples/display-test-ad'} reloadDocument>
+          Display test ad
+        </Link>
         <br />
-        <Link to={'/examples/key-value-targeting'}>Key value targeting</Link>
+        <Link to={'/examples/key-value-targeting'} reloadDocument>
+          Key value targeting
+        </Link>
         <br />
-        <Link to={'/examples/refresh'}>Refresh</Link>
+        <Link to={'/examples/refresh'} reloadDocument>
+          Refresh
+        </Link>
         <br />
-        <Link to={'/examples/ad-sizes'}>Ad sizes</Link>
+        <Link to={'/examples/ad-sizes'} reloadDocument>
+          Ad sizes
+        </Link>
       </div>
     </div>
   );

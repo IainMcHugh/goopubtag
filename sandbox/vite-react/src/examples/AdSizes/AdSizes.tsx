@@ -1,4 +1,6 @@
-import { GPTProvider, GPTSlot } from '../../../../../index';
+import { GPTProvider, GPTSlot, GUIDELINES } from '../../../../../index';
+
+const { UNIT_SIZE, SCREEN_SIZE } = GUIDELINES;
 
 const AdSizes = () => {
   return (
@@ -11,7 +13,6 @@ const AdSizes = () => {
 const Component = () => {
   return (
     <div>
-      <p>Display test ad</p>
       <h1>Fixed size ad slot</h1>
       <p>This ad slot will display an ad sized 300x250.</p>
       <div
@@ -20,10 +21,12 @@ const Component = () => {
           width: '100%',
         }}
       >
-        {/* <div id="fixed-size-ad" className="ad-slot"></div> */}
-        <GPTSlot slotId="fixed-size-ad" sizes={[300, 250]} />
+        <GPTSlot
+          adUnit="Travel/Europe/France/Paris"
+          slotId="banner-ad"
+          sizes={UNIT_SIZE.MPU_300}
+        />
       </div>
-
       <h1>Multi-size ad slot</h1>
       <p>
         This ad slot will display an ad with any of the following dimensions:
@@ -35,17 +38,12 @@ const Component = () => {
           width: '100%',
         }}
       >
-        {/* <div id="multi-size-ad" className="ad-slot"></div> */}
         <GPTSlot
+          adUnit="Travel/Europe"
           slotId="multi-size-ad"
-          sizes={[
-            [300, 250],
-            [728, 90],
-            [750, 200],
-          ]}
+          sizes={[UNIT_SIZE.MPU_300, UNIT_SIZE.LEADERBOARD, [750, 200]]}
         />
       </div>
-
       <h1>Fluid ad slot</h1>
       <p>
         This ad slot will resize its height to fit the creative content being
@@ -59,8 +57,12 @@ const Component = () => {
         }}
       >
         <div id="native-ad" className="ad-slot native-slot"></div>
+        <GPTSlot
+          adUnit="Travel/Europe"
+          slotId="native-ad"
+          sizes={UNIT_SIZE.FLUID}
+        />
       </div>
-
       <h1>Responsive ad slot</h1>
       <p>
         This ad slot will display different sized ads depending on the size of
@@ -83,7 +85,25 @@ const Component = () => {
           width: '100%',
         }}
       >
-        <div id="responsive-ad" className="ad-slot"></div>
+        <GPTSlot
+          adUnit="Travel/Europe"
+          slotId="responsive-ad"
+          sizes={[UNIT_SIZE.MPU_300, UNIT_SIZE.LEADERBOARD, [750, 200]]}
+          sizeMapping={[
+            {
+              viewport: [1024, 768],
+              sizes: [[750, 200], UNIT_SIZE.LEADERBOARD],
+            },
+            {
+              viewport: [640, 480],
+              sizes: UNIT_SIZE.MPU_300,
+            },
+            {
+              viewport: [0, 0],
+              sizes: UNIT_SIZE.BLANK,
+            },
+          ]}
+        />
       </div>
     </div>
   );

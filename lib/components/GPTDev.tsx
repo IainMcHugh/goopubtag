@@ -8,7 +8,7 @@ const GPTDev = () => {
   return (
     <div
       style={{
-        position: 'absolute',
+        position: 'fixed',
         bottom: '8px',
         right: '8px',
         width: '56px',

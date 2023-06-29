@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { DisplayTestAd } from './examples/DisplayTestAd/DisplayTestAd';
 import { KeyValueTargeting } from './examples/KeyValueTargeting/KeyValueTargeting';
 import { Refresh } from './examples/Refresh/Refresh';
+import { AdSizes } from './examples/AdSizes/AdSizes';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
   {
     path: '/examples/refresh',
     element: <Refresh />,
+  },
+  {
+    path: '/examples/ad-sizes',
+    element: <AdSizes />,
   },
 ]);
 
