@@ -31,6 +31,10 @@ function App() {
         <Link to={'/examples/display-limited-ad'} reloadDocument>
           Display limited ad
         </Link>
+        <br />
+        <Link to={'/examples/configure-privacy'} reloadDocument>
+          Configure privacy
+        </Link>
       </div>
     </div>
   );

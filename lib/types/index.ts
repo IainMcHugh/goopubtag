@@ -24,6 +24,7 @@ export type PrivacySettings = {
   nonPersonalizedAds: boolean;
   childDirectedTreatment: boolean;
   restrictDataProcessing: boolean;
+  underAgeOfConsent: boolean;
 };
 
 type LazyLoad = {

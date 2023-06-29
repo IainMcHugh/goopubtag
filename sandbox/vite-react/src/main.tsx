@@ -6,6 +6,7 @@ import { KeyValueTargeting } from './examples/KeyValueTargeting/KeyValueTargetin
 import { Refresh } from './examples/Refresh/Refresh';
 import { AdSizes } from './examples/AdSizes/AdSizes';
 import { DisplayLimitedAd } from './examples/DisplayLimitedAd/DisplayLimitedAd';
+import { ConfigurePrivacy } from './examples/ConfigurePrivacy/ConfigurePrivacy';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: '/examples/display-limited-ad',
     element: <DisplayLimitedAd />,
+  },
+  {
+    path: '/examples/configure-privacy',
+    element: <ConfigurePrivacy />,
   },
 ]);
 

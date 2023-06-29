@@ -53,7 +53,7 @@ const useGPT = (props?: UseGPTProps): UseGPT => {
   };
 
   const setPrivacySettings = (privacySettings: Partial<PrivacySettings>) => {
-    if (!limitedAds) {
+    if (!limitedAds && privacySettings.limitedAds !== undefined) {
       throw new Error(
         'limited ads must be enabled on GPTContext to set privacy settings'
       );
