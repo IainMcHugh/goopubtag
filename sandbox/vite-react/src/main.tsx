@@ -5,6 +5,7 @@ import { DisplayTestAd } from './examples/DisplayTestAd/DisplayTestAd';
 import { KeyValueTargeting } from './examples/KeyValueTargeting/KeyValueTargeting';
 import { Refresh } from './examples/Refresh/Refresh';
 import { AdSizes } from './examples/AdSizes/AdSizes';
+import { DisplayLimitedAd } from './examples/DisplayLimitedAd/DisplayLimitedAd';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: '/examples/ad-sizes',
     element: <AdSizes />,
+  },
+  {
+    path: '/examples/display-limited-ad',
+    element: <DisplayLimitedAd />,
   },
 ]);
 

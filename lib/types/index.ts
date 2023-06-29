@@ -19,6 +19,13 @@ export type Unit = {
   unit: any;
 };
 
+export type PrivacySettings = {
+  limitedAds: boolean;
+  nonPersonalizedAds: boolean;
+  childDirectedTreatment: boolean;
+  restrictDataProcessing: boolean;
+};
+
 type LazyLoad = {
   // Fetch slots within 5 viewports.
   fetchMarginPercent: number;
@@ -130,4 +137,5 @@ export type UseGPT = {
   setPageTargetingAttributes: (attributes: Attributes) => void;
   clearTargetingAttributes: (slotId: string, attributes?: string[]) => void;
   clearPageTargetingAttributes: (attributes?: string[]) => void;
+  setPrivacySettings: (settings: Partial<PrivacySettings>) => void;
 };

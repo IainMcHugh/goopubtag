@@ -1,8 +1,13 @@
 import { useGPTContext } from '../contexts/GPTProvider';
-import type { UseGPTProps, UseGPT, Attributes } from '../types';
+import type {
+  UseGPTProps,
+  UseGPT,
+  Attributes,
+  PrivacySettings,
+} from '../types';
 
 const useGPT = (props?: UseGPTProps): UseGPT => {
-  const { units } = useGPTContext();
+  const { units, limitedAds } = useGPTContext();
   const setTargetingAttributes = (slotId: string, attributes: Attributes) => {
     window.googletag?.cmd.push(() => {
       const unit = units.find((unit) => unit.slotId === slotId)?.unit;
@@ -47,6 +52,18 @@ const useGPT = (props?: UseGPTProps): UseGPT => {
     });
   };
 
+  const setPrivacySettings = (privacySettings: Partial<PrivacySettings>) => {
+    if (!limitedAds) {
+      throw new Error(
+        'limited ads must be enabled on GPTContext to set privacy settings'
+      );
+    } else {
+      window.googletag?.cmd.push(() => {
+        window.googletag?.pubads().setPrivacySettings(privacySettings);
+      });
+    }
+  };
+
   const refresh = (adSlots?: string[]) => {
     window.googletag?.cmd.push(() => {
       if (adSlots && adSlots.length !== 0) {
@@ -62,6 +79,7 @@ const useGPT = (props?: UseGPTProps): UseGPT => {
     setPageTargetingAttributes,
     clearTargetingAttributes,
     clearPageTargetingAttributes,
+    setPrivacySettings,
   };
 };
 

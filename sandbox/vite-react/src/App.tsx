@@ -27,6 +27,10 @@ function App() {
         <Link to={'/examples/ad-sizes'} reloadDocument>
           Ad sizes
         </Link>
+        <br />
+        <Link to={'/examples/display-limited-ad'} reloadDocument>
+          Display limited ad
+        </Link>
       </div>
     </div>
   );
