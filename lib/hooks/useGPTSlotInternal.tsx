@@ -4,8 +4,17 @@ import type { GPTSlotProps } from '../types';
 import { useGPTContext } from '../contexts/GPTProvider';
 
 const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
-  const { adUnit, sizes, sizeMapping, slotId, isLoaded, targetingArguments } =
-    props;
+  const {
+    adUnit,
+    sizes,
+    sizeMapping,
+    slotId,
+    isLoaded,
+    targetingArguments,
+    onSlotLoad,
+    onSlotIsViewable,
+    onSlotRenderEnded,
+  } = props;
   const { networkId, addUnit } = useGPTContext();
 
   const adUnitPath = `/${networkId}/${adUnit}`;
@@ -30,6 +39,19 @@ const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
             unit.setTargeting(tagetingKey, targetingArguments[tagetingKey]);
           });
         }
+        if (onSlotLoad) {
+          window.googletag?.pubads().addEventListener('slotOnload', onSlotLoad);
+        }
+        if (onSlotIsViewable) {
+          window.googletag
+            ?.pubads()
+            .addEventListener('impressionViewable', onSlotIsViewable);
+        }
+        if (onSlotRenderEnded) {
+          window.googletag
+            ?.pubads()
+            .addEventListener('slotRenderEnded', onSlotRenderEnded);
+        }
         slotId && addUnit({ slotId, unit });
         // Enable the PubAdsService.
         window.googletag?.enableServices();
@@ -44,10 +66,15 @@ const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
       return {
         width: '100%',
       };
+    } else if (Array.isArray(sizes[0])) {
+      // TODO: going to depend on the viewport - this is wrong
+      return {
+        width: '100%',
+      };
     } else {
       return {
-        width: sizes[0],
-        height: sizes[1],
+        width: sizes[0] as number,
+        height: sizes[1] as number,
       };
     }
   };

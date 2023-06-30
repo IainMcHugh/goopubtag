@@ -49,38 +49,24 @@ type AutoReload = Pick<
   | 'lazyLoad'
 >;
 
-type SlotRenderEndedEvent = {
-  advertiserId: any;
-  campaignId: any;
-  companyIds: any;
-  creativeId: any;
-  creativeTemplateId: any;
-  isBackfill: any;
-  isEmpty: any;
-  labelIds: any;
-  lineItemId: any;
-  serviceName: any;
-  size: any;
-  slot: any;
-  slotContentChanged: any;
-  sourceAgnosticCreativeId: any;
-  sourceAgnosticLineItemId: any;
-  yieldGroupIds: any;
+type SlotRender = {
+  // complete
+  getSlotElementId: Function;
 };
 
-type SlotVisibilityChangedEvent = {
-  inViewPercentage: any;
-  serviceName: any;
-  slot: any;
+type SlotVisibilityChanged = {
+  // complete
+  getSlotElementId: Function;
 };
 
 type Event<T> = {
-  slotId: string;
-  event: T;
+  serviceName: string;
+  slot: T;
 };
 
-type SlotRenderEvent = Event<SlotRenderEndedEvent>;
-type SlotViewableEvent = Event<SlotVisibilityChangedEvent>;
+export type SlotLoadEvent = Event<SlotRender>;
+export type SlotRenderEndedEvent = Event<SlotRender>;
+export type SlotViewableEvent = Event<SlotVisibilityChanged>;
 
 export type GPT = {
   adUnit?: string;
@@ -105,8 +91,9 @@ export type SlotUnit = GPT & {
   networkId?: string;
   slotId: string;
   sizes: Sizes;
-  onSlotRender?: (event: SlotRenderEvent) => void;
+  onSlotLoad?: (event: SlotLoadEvent) => void;
   onSlotIsViewable?: (event: SlotViewableEvent) => void;
+  onSlotRenderEnded?: (event: SlotRenderEndedEvent) => void;
   renderOutOfThePage?: boolean;
   shouldRefresh?: () => boolean;
 };

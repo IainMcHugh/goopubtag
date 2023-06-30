@@ -7,6 +7,7 @@ import { Refresh } from './examples/Refresh/Refresh';
 import { AdSizes } from './examples/AdSizes/AdSizes';
 import { DisplayLimitedAd } from './examples/DisplayLimitedAd/DisplayLimitedAd';
 import { ConfigurePrivacy } from './examples/ConfigurePrivacy/ConfigurePrivacy';
+import { AdEventListeners } from './examples/AdEventListeners/AdEventListeners';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: '/examples/configure-privacy',
     element: <ConfigurePrivacy />,
+  },
+  {
+    path: '/examples/ad-event-listeners',
+    element: <AdEventListeners />,
   },
 ]);
 

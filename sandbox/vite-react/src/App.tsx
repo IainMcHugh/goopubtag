@@ -35,6 +35,10 @@ function App() {
         <Link to={'/examples/configure-privacy'} reloadDocument>
           Configure privacy
         </Link>
+        <br />
+        <Link to={'/examples/ad-event-listeners'} reloadDocument>
+          Ad Event Listeners
+        </Link>
       </div>
     </div>
   );
