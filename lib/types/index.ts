@@ -31,6 +31,10 @@ export type CollapseSlot = Collapse | 'expand_strict';
 
 export type Collapse = 'default' | 'expand' | 'collapse';
 
+export type Anchor = Pick<SlotUnit, 'adUnit' | 'targetingArguments'> & {
+  position: 'top' | 'bottom';
+};
+
 type LazyLoad = {
   // Fetch slots within 5 viewports.
   fetchMarginPercent: number;
@@ -89,6 +93,7 @@ export type SlotProvider = GPT & {
   lazyLoad?: boolean | LazyLoad;
   autoReload?: AutoReload;
   fallback?: Collapse;
+  anchor?: Anchor;
 };
 
 export type SlotUnit = GPT & {

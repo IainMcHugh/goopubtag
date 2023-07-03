@@ -7,9 +7,11 @@ const useGPTProviderInternal = (props: SlotProvider) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [units, setUnits] = useState<Unit[]>([]);
   const {
+    networkId,
     limitedAds = false,
     fallback = 'default',
     targetingArguments,
+    anchor,
   } = props;
 
   const addUnit = (unit: Unit) => setUnits((prev) => [...prev, unit]);
@@ -23,6 +25,29 @@ const useGPTProviderInternal = (props: SlotProvider) => {
   useEffect(() => {
     if (isLoaded) {
       window.googletag?.cmd.push(() => {
+        if (anchor) {
+          // TODO: figure out how to test
+          const adUnitPath = `/${networkId}/${anchor.adUnit}`;
+          let unit = window.googletag
+            ?.defineOutOfPageSlot(
+              adUnitPath,
+              anchor.position === 'top'
+                ? window.googletag?.enums.OutOfPageFormat.TOP_ANCHOR
+                : window.googletag.enums.OutOfPageFormat.BOTTOM_ANCHOR
+            )
+            ?.addService(window?.googletag?.pubads());
+
+          if (unit && anchor.targetingArguments) {
+            Object.keys(anchor.targetingArguments).forEach((tagetingKey) => {
+              unit.setTargeting(
+                tagetingKey,
+                anchor.targetingArguments![tagetingKey]
+              );
+            });
+
+            unit.addService(window.googletag?.pubads());
+          }
+        }
         if (targetingArguments) {
           Object.keys(targetingArguments).forEach((tagetingKey) => {
             window.googletag

@@ -21,7 +21,12 @@ type GoogleTag = {
   setAdIframeTitle: Function;
   setConfig: Function;
   sizeMapping: Function;
-  enums: Object;
+  enums: {
+    OutOfPageFormat: {
+      TOP_ANCHOR: any;
+      BOTTOM_ANCHOR: any;
+    };
+  };
   encryptedSignalProviders: Object;
   secureSignalProviders: Object;
   _vars_: Object;

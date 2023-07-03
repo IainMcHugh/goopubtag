@@ -48,6 +48,10 @@ function App() {
           Display out of page ad
         </Link>
         <br />
+        <Link to={'/examples/display-anchor-ad'} reloadDocument>
+          Display anchor ad
+        </Link>
+        <br />
       </div>
     </div>
   );
