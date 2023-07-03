@@ -20,6 +20,7 @@ const GPTDev = () => {
         borderRadius: '12px',
         border: '1px dotted rebeccapurple',
         backgroundColor: '#66339933',
+        zIndex: '9999',
       }}
     >
       <button

@@ -5,10 +5,13 @@ const DisplayAnchorAd = () => {
     <GPTProvider
       networkId={6355419}
       debug={true}
-      anchor={{
-        adUnit: 'Travel',
-        position: 'top',
-        targetingArguments: { test: 'anchor ' },
+      outOfPage={{
+        type: 'anchor',
+        settings: {
+          adUnit: 'Travel',
+          position: 'top',
+          targetingArguments: { test: 'anchor ' },
+        },
       }}
     >
       <Component />

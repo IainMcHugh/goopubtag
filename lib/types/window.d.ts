@@ -25,6 +25,7 @@ type GoogleTag = {
     OutOfPageFormat: {
       TOP_ANCHOR: any;
       BOTTOM_ANCHOR: any;
+      REWARDED: any;
     };
   };
   encryptedSignalProviders: Object;

@@ -52,6 +52,10 @@ function App() {
           Display anchor ad
         </Link>
         <br />
+        <Link to={'/examples/display-rewarded-ad'} reloadDocument>
+          Display rewarded ad
+        </Link>
+        <br />
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import { AdEventListeners } from './examples/AdEventListeners/AdEventListeners';
 import { CollapseEmptyAdSlots } from './examples/CollapseEmptyAdSlots/CollapseEmptyAdSlots';
 import { DisplayOutOfPageAd } from './examples/DisplayOutOfPageAd/DisplayOutOfPageAd';
 import { DisplayAnchorAd } from './examples/DisplayAnchorAd/DisplayAnchorAd';
+import { DisplayRewardedAd } from './examples/DisplayRewardedAd/DisplayRewardedAd';
 
 const router = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
   {
     path: '/examples/display-anchor-ad',
     element: <DisplayAnchorAd />,
+  },
+  {
+    path: '/examples/display-rewarded-ad',
+    element: <DisplayRewardedAd />,
   },
 ]);
 

@@ -31,9 +31,28 @@ export type CollapseSlot = Collapse | 'expand_strict';
 
 export type Collapse = 'default' | 'expand' | 'collapse';
 
-export type Anchor = Pick<SlotUnit, 'adUnit' | 'targetingArguments'> & {
+export type AnchorSettings = Pick<SlotUnit, 'adUnit' | 'targetingArguments'> & {
   position: 'top' | 'bottom';
 };
+
+export type RewardedSettings = Pick<
+  SlotUnit,
+  'adUnit' | 'targetingArguments'
+> & {
+  onReady?: (event: any) => void;
+  onClosed?: (event: any) => void;
+  onGranted?: (event: any) => void;
+};
+
+export type OutOfPageTypes =
+  | {
+      type: 'anchor';
+      settings: AnchorSettings;
+    }
+  | { type: 'rewarded'; settings: RewardedSettings };
+
+export type OutOfPage = Pick<SlotUnit, 'adUnit' | 'targetingArguments'> &
+  OutOfPageTypes;
 
 type LazyLoad = {
   // Fetch slots within 5 viewports.
@@ -93,7 +112,7 @@ export type SlotProvider = GPT & {
   lazyLoad?: boolean | LazyLoad;
   autoReload?: AutoReload;
   fallback?: Collapse;
-  anchor?: Anchor;
+  outOfPage?: OutOfPage;
 };
 
 export type SlotUnit = GPT & {

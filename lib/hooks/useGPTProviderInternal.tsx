@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import type { SlotProvider, Unit } from '../types';
+import type { OutOfPage, SlotProvider, Unit } from '../types';
 import { getGPTScript } from '../utils';
 
 const useGPTProviderInternal = (props: SlotProvider) => {
@@ -11,10 +11,29 @@ const useGPTProviderInternal = (props: SlotProvider) => {
     limitedAds = false,
     fallback = 'default',
     targetingArguments,
-    anchor,
+    outOfPage,
   } = props;
 
   const addUnit = (unit: Unit) => setUnits((prev) => [...prev, unit]);
+
+  const getOutOfPageSlotId = (outOfPage: OutOfPage) => {
+    switch (outOfPage.type) {
+      case 'anchor': {
+        if (outOfPage.settings.position === 'top') {
+          return window.googletag?.enums.OutOfPageFormat.TOP_ANCHOR;
+        } else {
+          return window.googletag?.enums.OutOfPageFormat.BOTTOM_ANCHOR;
+        }
+      }
+      case 'rewarded': {
+        return window.googletag?.enums.OutOfPageFormat.REWARDED;
+      }
+
+      default: {
+        return null;
+      }
+    }
+  };
 
   useEffect(() => {
     const gptScript = getGPTScript({ limitedAds });
@@ -25,27 +44,45 @@ const useGPTProviderInternal = (props: SlotProvider) => {
   useEffect(() => {
     if (isLoaded) {
       window.googletag?.cmd.push(() => {
-        if (anchor) {
-          // TODO: figure out how to test
-          const adUnitPath = `/${networkId}/${anchor.adUnit}`;
+        if (outOfPage) {
+          const { settings } = outOfPage;
+          // TODO: figure out how to test anchor
+          const adUnitPath = `/${networkId}/${settings.adUnit}`;
           let unit = window.googletag
-            ?.defineOutOfPageSlot(
-              adUnitPath,
-              anchor.position === 'top'
-                ? window.googletag?.enums.OutOfPageFormat.TOP_ANCHOR
-                : window.googletag.enums.OutOfPageFormat.BOTTOM_ANCHOR
-            )
+            ?.defineOutOfPageSlot(adUnitPath, getOutOfPageSlotId(outOfPage))
             ?.addService(window?.googletag?.pubads());
 
-          if (unit && anchor.targetingArguments) {
-            Object.keys(anchor.targetingArguments).forEach((tagetingKey) => {
+          if (unit && settings.targetingArguments) {
+            Object.keys(settings.targetingArguments).forEach((tagetingKey) => {
               unit.setTargeting(
                 tagetingKey,
-                anchor.targetingArguments![tagetingKey]
+                settings.targetingArguments![tagetingKey]
               );
             });
 
             unit.addService(window.googletag?.pubads());
+            if (outOfPage.type === 'rewarded') {
+              window.googletag
+                ?.pubads()
+                .addEventListener(
+                  'rewardedSlotReady',
+                  outOfPage.settings.onReady
+                );
+
+              window.googletag
+                ?.pubads()
+                .addEventListener(
+                  'rewardedSlotClosed',
+                  outOfPage.settings.onClosed
+                );
+
+              window.googletag
+                ?.pubads()
+                .addEventListener(
+                  'rewardedSlotGranted',
+                  outOfPage.settings.onGranted
+                );
+            }
           }
         }
         if (targetingArguments) {
