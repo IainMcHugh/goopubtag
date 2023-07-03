@@ -43,6 +43,11 @@ function App() {
         <Link to={'/examples/collapse-empty-ad-slots'} reloadDocument>
           Collapse empty ad slots
         </Link>
+        <br />
+        <Link to={'/examples/display-out-of-page-ad'} reloadDocument>
+          Display out of page ad
+        </Link>
+        <br />
       </div>
     </div>
   );

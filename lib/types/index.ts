@@ -98,7 +98,7 @@ export type SlotUnit = GPT & {
   onSlotLoad?: (event: SlotLoadEvent) => void;
   onSlotIsViewable?: (event: SlotViewableEvent) => void;
   onSlotRenderEnded?: (event: SlotRenderEndedEvent) => void;
-  renderOutOfThePage?: boolean;
+  outOfPage?: boolean;
   shouldRefresh?: () => boolean;
   fallback?: CollapseSlot;
 };

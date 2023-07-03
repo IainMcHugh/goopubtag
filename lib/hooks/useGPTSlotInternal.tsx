@@ -15,6 +15,7 @@ const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
     onSlotIsViewable,
     onSlotRenderEnded,
     fallback = 'default',
+    outOfPage = false,
   } = props;
   const { networkId, addUnit } = useGPTContext();
 
@@ -22,9 +23,16 @@ const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
   useEffect(() => {
     if (isLoaded) {
       window.googletag?.cmd.push(() => {
-        const unit = window.googletag
-          ?.defineSlot(adUnitPath, sizes, slotId)
-          ?.addService(window?.googletag?.pubads());
+        let unit: any = null;
+        if (outOfPage) {
+          unit = window.googletag
+            ?.defineOutOfPageSlot(adUnitPath, slotId)
+            ?.addService(window?.googletag?.pubads());
+        } else {
+          unit = window.googletag
+            ?.defineSlot(adUnitPath, sizes, slotId)
+            ?.addService(window?.googletag?.pubads());
+        }
 
         if (sizeMapping) {
           const mapping = window.googletag?.sizeMapping();

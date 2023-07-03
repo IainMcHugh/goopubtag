@@ -9,6 +9,7 @@ import { DisplayLimitedAd } from './examples/DisplayLimitedAd/DisplayLimitedAd';
 import { ConfigurePrivacy } from './examples/ConfigurePrivacy/ConfigurePrivacy';
 import { AdEventListeners } from './examples/AdEventListeners/AdEventListeners';
 import { CollapseEmptyAdSlots } from './examples/CollapseEmptyAdSlots/CollapseEmptyAdSlots';
+import { DisplayOutOfPageAd } from './examples/DisplayOutOfPageAd/DisplayOutOfPageAd';
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
   {
     path: '/examples/collapse-empty-ad-slots',
     element: <CollapseEmptyAdSlots />,
+  },
+  {
+    path: '/examples/display-out-of-page-ad',
+    element: <DisplayOutOfPageAd />,
   },
 ]);
 
