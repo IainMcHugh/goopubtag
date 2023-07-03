@@ -37,7 +37,11 @@ function App() {
         </Link>
         <br />
         <Link to={'/examples/ad-event-listeners'} reloadDocument>
-          Ad Event Listeners
+          Ad event Listeners
+        </Link>
+        <br />
+        <Link to={'/examples/collapse-empty-ad-slots'} reloadDocument>
+          Collapse empty ad slots
         </Link>
       </div>
     </div>

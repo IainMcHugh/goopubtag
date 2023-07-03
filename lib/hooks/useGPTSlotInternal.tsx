@@ -14,6 +14,7 @@ const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
     onSlotLoad,
     onSlotIsViewable,
     onSlotRenderEnded,
+    fallback = 'default',
   } = props;
   const { networkId, addUnit } = useGPTContext();
 
@@ -51,6 +52,24 @@ const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
           window.googletag
             ?.pubads()
             .addEventListener('slotRenderEnded', onSlotRenderEnded);
+        }
+        if (fallback && fallback !== 'default') {
+          switch (fallback) {
+            case 'expand': {
+              unit.setCollapseEmptyDiv(true, true);
+              break;
+            }
+            case 'expand_strict': {
+              unit.setCollapseEmptyDiv(false);
+              break;
+            }
+            case 'collapse': {
+              unit.setCollapseEmptyDiv(true);
+              break;
+            }
+            default:
+              break;
+          }
         }
         slotId && addUnit({ slotId, unit });
         // Enable the PubAdsService.

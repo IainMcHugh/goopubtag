@@ -6,7 +6,11 @@ import { getGPTScript } from '../utils';
 const useGPTProviderInternal = (props: SlotProvider) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [units, setUnits] = useState<Unit[]>([]);
-  const { limitedAds = false, targetingArguments } = props;
+  const {
+    limitedAds = false,
+    fallback = 'default',
+    targetingArguments,
+  } = props;
 
   const addUnit = (unit: Unit) => setUnits((prev) => [...prev, unit]);
 
@@ -25,6 +29,22 @@ const useGPTProviderInternal = (props: SlotProvider) => {
               ?.pubads()
               .setTargeting(tagetingKey, targetingArguments[tagetingKey]);
           });
+        }
+
+        if (fallback && fallback !== 'default') {
+          switch (fallback) {
+            case 'collapse': {
+              window.googletag?.pubads().collapseEmptyDivs();
+              break;
+            }
+            case 'expand': {
+              window.googletag?.pubads().collapseEmptyDivs(true);
+              break;
+            }
+            default: {
+              break;
+            }
+          }
         }
       });
     }

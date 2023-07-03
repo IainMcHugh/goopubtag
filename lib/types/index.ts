@@ -27,6 +27,10 @@ export type PrivacySettings = {
   underAgeOfConsent: boolean;
 };
 
+export type CollapseSlot = Collapse | 'expand_strict';
+
+export type Collapse = 'default' | 'expand' | 'collapse';
+
 type LazyLoad = {
   // Fetch slots within 5 viewports.
   fetchMarginPercent: number;
@@ -45,7 +49,7 @@ type AutoReload = Pick<
   | 'sizeMapping'
   | 'adSenseAttributes'
   | 'targetingArguments'
-  | 'collapseEmptyDivs'
+  | 'fallback'
   | 'lazyLoad'
 >;
 
@@ -84,7 +88,7 @@ export type SlotProvider = GPT & {
   autoLoad?: boolean;
   lazyLoad?: boolean | LazyLoad;
   autoReload?: AutoReload;
-  collapseEmptyDivs?: boolean;
+  fallback?: Collapse;
 };
 
 export type SlotUnit = GPT & {
@@ -96,6 +100,7 @@ export type SlotUnit = GPT & {
   onSlotRenderEnded?: (event: SlotRenderEndedEvent) => void;
   renderOutOfThePage?: boolean;
   shouldRefresh?: () => boolean;
+  fallback?: CollapseSlot;
 };
 
 /** Context types */
