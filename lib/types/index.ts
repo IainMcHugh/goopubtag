@@ -7,7 +7,7 @@ import type { ReactNode } from 'react';
 export type Attributes = { [key: string]: string };
 
 type Size = readonly [number, number];
-type Sizes = string | Size | Size[];
+export type Sizes = string | Size | Size[];
 
 type SizeMapping = {
   viewport: Size;
@@ -119,12 +119,12 @@ export type SlotUnit = GPT & {
   networkId?: string;
   slotId: string;
   sizes: Sizes;
+  outOfPage?: boolean;
+  fallback?: CollapseSlot;
   onSlotLoad?: (event: SlotLoadEvent) => void;
   onSlotIsViewable?: (event: SlotViewableEvent) => void;
   onSlotRenderEnded?: (event: SlotRenderEndedEvent) => void;
-  outOfPage?: boolean;
   shouldRefresh?: () => boolean;
-  fallback?: CollapseSlot;
 };
 
 /** Context types */
