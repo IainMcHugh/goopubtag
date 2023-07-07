@@ -20,7 +20,17 @@
     "docs:build": "next build docs",
     "docs:start": "next start docs"
   },
-  "keywords": [],
+  "keywords": [
+    "react",
+    "goopubtag",
+    "google publisher tag",
+    "gpt",
+    "dfp",
+    "double click for publishers",
+    "ad manager",
+    "ads",
+    "advertising"
+  ],
   "author": "Iain McHugh",
   "license": "MIT",
   "devDependencies": {
