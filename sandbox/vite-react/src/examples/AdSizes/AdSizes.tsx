@@ -1,4 +1,4 @@
-import { GPTProvider, GPTSlot, GUIDELINES } from '../../../../../index';
+import { GPTProvider, GPTSlot, GUIDELINES } from '../../../../../dist';
 
 const { UNIT_SIZE, SCREEN_SIZE } = GUIDELINES;
 

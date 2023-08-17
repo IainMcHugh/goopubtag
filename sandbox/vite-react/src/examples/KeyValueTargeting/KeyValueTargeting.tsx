@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { GPTProvider, GPTSlot, useGPT } from '../../../../../index';
+import { GPTProvider, GPTSlot, useGPT } from '../../../../../dist';
 
 const KeyValueTargeting = () => {
   return (

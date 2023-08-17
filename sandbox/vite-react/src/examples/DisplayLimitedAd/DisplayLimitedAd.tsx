@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { GPTProvider, GPTSlot, useGPT } from '../../../../../index';
+import { GPTProvider, GPTSlot, useGPT } from '../../../../../dist';
 
 const DisplayLimitedAd = () => {
   return (

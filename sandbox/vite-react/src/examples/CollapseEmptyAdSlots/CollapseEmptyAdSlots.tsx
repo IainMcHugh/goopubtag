@@ -1,4 +1,4 @@
-import { GPTProvider, GPTSlot } from '../../../../../index';
+import { GPTProvider, GPTSlot } from '../../../../../dist';
 
 const CollapseEmptyAdSlots = () => {
   return (

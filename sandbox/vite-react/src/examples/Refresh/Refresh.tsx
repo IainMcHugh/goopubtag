@@ -1,4 +1,4 @@
-import { GPTProvider, GPTSlot, useGPT } from '../../../../../index';
+import { GPTProvider, GPTSlot, useGPT } from '../../../../../dist';
 
 const Refresh = () => {
   return (
