@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 
-import type { OutOfPage, SlotProvider, Unit } from '../types';
-import { getGPTScript } from '../utils';
+import type { OutOfPage, SlotProvider } from '../../types';
+import type { Unit } from './GPTProvider.type';
+import { getGPTScript } from '../../utils';
 
 const useGPTProviderInternal = (props: SlotProvider) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);

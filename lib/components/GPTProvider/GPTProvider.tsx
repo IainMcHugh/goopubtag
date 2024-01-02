@@ -1,8 +1,8 @@
 import { createContext, useContext } from 'react';
 
-import type { GPTContext, GPTProviderProps } from '../types';
-import { useGPTProviderInternal } from '../hooks/useGPTProviderInternal';
-import { GPTDev } from '../components/GPTDev';
+import type { GPTContext, GPTProviderProps } from './GPTProvider.type';
+import { useGPTProviderInternal } from './useGPTProviderInternal';
+import { GPTDev } from '../GPTDevIcon/GPTDev';
 
 const GPTContext = createContext<GPTContext>({} as GPTContext);
 

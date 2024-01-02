@@ -1,10 +1,6 @@
-import { useGPTContext } from '../contexts/GPTProvider';
-import type {
-  UseGPTProps,
-  UseGPT,
-  Attributes,
-  PrivacySettings,
-} from '../types';
+import type { Attributes, PrivacySettings } from '../../types';
+import type { UseGPTProps, UseGPT } from './useGPT.type';
+import { useGPTContext } from '../../components/GPTProvider/GPTProvider';
 
 const useGPT = (props?: UseGPTProps): UseGPT => {
   const { units, limitedAds } = useGPTContext();

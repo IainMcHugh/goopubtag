@@ -1,9 +1,32 @@
 import { CSSProperties, useEffect } from 'react';
 
-import type { GPTSlotProps } from '../types';
-import { useGPTContext } from '../contexts/GPTProvider';
+import type { GPTSlotInternalProps } from './GPTSlot.type';
+import type { Sizes, SlotLoadEvent, SlotViewableEvent } from '../../types';
+import { useGPTContext } from '../GPTProvider/GPTProvider';
 
-const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
+const defineSlot = (adUnitPath: string, sizes: Sizes, slotId: string) =>
+  window.googletag
+    ?.defineSlot(adUnitPath, sizes, slotId)
+    ?.addService(window.googletag?.pubads());
+
+const defineOutOfPageSlot = (adUnitPath: string, slotId: string) =>
+  window.googletag
+    ?.defineOutOfPageSlot(adUnitPath, slotId)
+    ?.addService(window.googletag?.pubads());
+
+const getMapping = () => window.googletag?.sizeMapping();
+
+const handleSlotLoad = (onSlotLoad: (event: SlotLoadEvent) => void) =>
+  window.googletag?.pubads().addEventListener('slotOnload', onSlotLoad);
+
+const handleSlotIsViewable = (
+  onSlotIsViewable: (event: SlotViewableEvent) => void
+) =>
+  window.googletag
+    ?.pubads()
+    .addEventListener('impressionViewable', onSlotIsViewable);
+
+const useGPTSlotInternal = (props: GPTSlotInternalProps) => {
   const {
     adUnit,
     sizes,
@@ -25,17 +48,14 @@ const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
       window.googletag?.cmd.push(() => {
         let unit: any = null;
         if (outOfPage) {
-          unit = window.googletag
-            ?.defineOutOfPageSlot(adUnitPath, slotId)
-            ?.addService(window?.googletag?.pubads());
+          unit = defineOutOfPageSlot(adUnitPath, slotId);
         } else {
-          unit = window.googletag
-            ?.defineSlot(adUnitPath, sizes, slotId)
-            ?.addService(window?.googletag?.pubads());
+          unit = defineSlot(adUnitPath, sizes, slotId);
         }
 
         if (sizeMapping) {
-          const mapping = window.googletag?.sizeMapping();
+          const mapping = getMapping();
+          // const mapping = window.googletag?.sizeMapping();
           sizeMapping.forEach(({ viewport, sizes }) => {
             mapping.addSize(viewport, sizes);
           });
@@ -48,14 +68,8 @@ const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
             unit.setTargeting(tagetingKey, targetingArguments[tagetingKey]);
           });
         }
-        if (onSlotLoad) {
-          window.googletag?.pubads().addEventListener('slotOnload', onSlotLoad);
-        }
-        if (onSlotIsViewable) {
-          window.googletag
-            ?.pubads()
-            .addEventListener('impressionViewable', onSlotIsViewable);
-        }
+        if (onSlotLoad) handleSlotLoad(onSlotLoad);
+        if (onSlotIsViewable) handleSlotIsViewable(onSlotIsViewable);
         if (onSlotRenderEnded) {
           window.googletag
             ?.pubads()
