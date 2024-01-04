@@ -18,7 +18,7 @@ export type ChildrenWithProps<T> = T & {
 /**
  * Key-value pairs used for targeting
  */
-export type Attributes = { [key: string]: string };
+export type Attributes = Record<string, string | string[]>;
 
 /**
  * A basic Ad size, defining the width and height respectively
@@ -99,6 +99,11 @@ export type OutOfPageTypes =
 
 export type OutOfPage = Pick<SlotUnit, 'adUnit' | 'targetingArguments'> &
   OutOfPageTypes;
+
+export type Mapping = {
+  addSize: (viewport: Size, sizes: Sizes) => void;
+  build: () => void;
+};
 
 /**
  * Enables lazy loading in GPT as defined by the config object. For more detailed examples, see the {@link https://developers.google.com/publisher-tag/samples/lazy-loading Lazy loading sample}.

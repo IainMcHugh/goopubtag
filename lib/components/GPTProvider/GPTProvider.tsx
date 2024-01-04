@@ -1,18 +1,24 @@
 import { createContext, useContext } from 'react';
 
 import type { GPTContext, GPTProviderProps } from './GPTProvider.type';
-import { useGPTProviderInternal } from './useGPTProviderInternal';
+import { useGPTProvider } from './useGPTProvider';
 import { GPTDev } from '../GPTDevIcon/GPTDev';
 
 const GPTContext = createContext<GPTContext>({} as GPTContext);
 
+/**
+ * The `GPTProvider` is required to initialize GPT as well as for rendering `GPTSlots` in the DOM.
+ * `GPTSlot` must be nested within a `GPTProvider`.
+ * @param props Initial GPT Provider props
+ * @returns
+ */
 const GPTProvider = (props: GPTProviderProps) => {
-  const { children, ...gpt } = props;
-  const rest = useGPTProviderInternal(gpt);
+  const { children, ...passedProps } = props;
+  const computedProps = useGPTProvider(passedProps);
   return (
-    <GPTContext.Provider value={{ ...gpt, ...rest }}>
+    <GPTContext.Provider value={{ ...passedProps, ...computedProps }}>
       {children}
-      {gpt.debug && <GPTDev />}
+      {passedProps.debug && <GPTDev />}
     </GPTContext.Provider>
   );
 };
