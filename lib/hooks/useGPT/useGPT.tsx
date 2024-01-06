@@ -1,4 +1,9 @@
-import type { Attributes, PrivacySettings } from '../../types';
+import type {
+  Attributes,
+  KeyOfType,
+  PrivacySettings,
+  UnitTargeting,
+} from '../../types';
 import type { UseGPT } from './useGPT.type';
 import { useGPTContext } from '../../components/GPTProvider/GPTProvider';
 import { gtag } from '../../utils/gtag';
@@ -7,7 +12,9 @@ import { gtag } from '../../utils/gtag';
  * A hook that enables dynamic updates to page level and slot configuration
  * @returns
  */
-const useGPT = (): UseGPT => {
+const useGPT = <
+  PageAttributes extends Attributes = Attributes
+>(): UseGPT<PageAttributes> => {
   const { units, limitedAds } = useGPTContext();
 
   /**
@@ -16,7 +23,10 @@ const useGPT = (): UseGPT => {
    * @param attributes The attributes to be set
    * @returns
    */
-  const setTargetingAttributes = (slotId: string, attributes: Attributes) => {
+  const setTargetingAttributes = <A extends UnitTargeting>(
+    slotId: A['slotId'],
+    attributes: A['attributes']
+  ) => {
     gtag.push(() => {
       const unit = units.find((unit) => unit.slotId === slotId)?.unit;
       Object.keys(attributes).forEach((tagetingKey) => {
@@ -30,7 +40,7 @@ const useGPT = (): UseGPT => {
    * @param attributes The attributes to be set
    * @returns
    */
-  const setPageTargetingAttributes = (attributes: Attributes) => {
+  const setPageTargetingAttributes = (attributes: PageAttributes) => {
     gtag.push(() => {
       Object.keys(attributes).forEach((targetingKey) => {
         gtag.setTargeting(targetingKey, attributes[targetingKey]);
@@ -47,12 +57,15 @@ const useGPT = (): UseGPT => {
    * @param attributes The attributes to be cleared
    * @returns
    */
-  const clearTargetingAttributes = (slotId: string, attributes?: string[]) => {
+  const clearTargetingAttributes = <A extends UnitTargeting>(
+    slotId: A['slotId'],
+    attributes?: KeyOfType<A['attributes']>[]
+  ) => {
     gtag.push(() => {
       const unit = units.find((unit) => unit.slotId === slotId)?.unit;
       if (attributes) {
-        attributes.forEach((tagetingKey) => {
-          unit.clearTargeting(tagetingKey);
+        attributes.forEach((targetingKey) => {
+          unit.clearTargeting(targetingKey);
         });
       } else unit.clearTargeting();
     });
@@ -66,10 +79,13 @@ const useGPT = (): UseGPT => {
    * @param attributes The attributes to be cleared
    * @returns
    */
-  const clearPageTargetingAttributes = (attributes?: string[]) => {
+  const clearPageTargetingAttributes = (
+    attributes?: KeyOfType<PageAttributes>[]
+  ) => {
     gtag.push(() => {
       if (attributes) {
         attributes.forEach((targetingKey) => {
+          //@ts-ignore
           gtag.clearTargeting(targetingKey);
         });
       } else gtag.clearTargeting();
@@ -102,7 +118,7 @@ const useGPT = (): UseGPT => {
    * @param adSlots The list of ad slot(s)
    * @returns
    */
-  const refresh = (adSlots?: string[]) => {
+  const refresh = <AdSlots extends string[] = string[]>(adSlots?: AdSlots) => {
     gtag.push(() => {
       if (adSlots && adSlots.length !== 0) {
         gtag.refresh(adSlots);

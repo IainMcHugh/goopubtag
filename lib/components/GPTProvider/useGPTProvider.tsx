@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import type { SlotProvider } from '../../types';
+import type { Attributes, SlotProvider } from '../../types';
 import type { Unit } from './GPTProvider.type';
 import { getGPTScript } from '../../utils';
 import { gtag } from '../../utils/gtag';
@@ -11,7 +11,9 @@ type UseGPTProvider = {
   addUnit: (unit: Unit) => void;
 };
 
-const useGPTProvider = (props: SlotProvider): UseGPTProvider => {
+const useGPTProvider = <PageAttributes extends Attributes>(
+  props: SlotProvider<PageAttributes>
+): UseGPTProvider => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [units, setUnits] = useState<Unit[]>([]);
   const {
@@ -43,10 +45,10 @@ const useGPTProvider = (props: SlotProvider): UseGPTProvider => {
           );
 
           if (unit && settings.targetingArguments) {
-            Object.keys(settings.targetingArguments).forEach((tagetingKey) => {
+            Object.keys(settings.targetingArguments).forEach((targetingKey) => {
               unit.setTargeting(
-                tagetingKey,
-                settings.targetingArguments![tagetingKey]
+                targetingKey,
+                settings.targetingArguments![targetingKey]
               );
             });
 
@@ -56,8 +58,8 @@ const useGPTProvider = (props: SlotProvider): UseGPTProvider => {
           }
         }
         if (targetingArguments) {
-          Object.keys(targetingArguments).forEach((tagetingKey) => {
-            gtag.setTargeting(tagetingKey, targetingArguments[tagetingKey]);
+          Object.keys(targetingArguments).forEach((targetingKey) => {
+            gtag.setTargeting(targetingKey, targetingArguments[targetingKey]);
           });
         }
 
