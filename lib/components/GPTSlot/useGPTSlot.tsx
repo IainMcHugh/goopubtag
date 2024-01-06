@@ -1,9 +1,10 @@
 import { CSSProperties, useEffect } from 'react';
 
-import type { GPTSlotProps } from '../types';
-import { useGPTContext } from '../contexts/GPTProvider';
+import type { UseGPTSlotProps } from './GPTSlot.type';
+import { useGPTContext } from '../GPTProvider/GPTProvider';
+import { gtag } from '../../utils/gtag';
 
-const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
+const useGPTSlot = (props: UseGPTSlotProps) => {
   const {
     adUnit,
     sizes,
@@ -18,24 +19,20 @@ const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
     outOfPage = false,
   } = props;
   const { networkId, addUnit } = useGPTContext();
+  const adUnitPath = gtag.getAdUnitPath(networkId, adUnit);
 
-  const adUnitPath = `/${networkId}/${adUnit}`;
   useEffect(() => {
     if (isLoaded) {
-      window.googletag?.cmd.push(() => {
+      gtag.push(() => {
         let unit: any = null;
         if (outOfPage) {
-          unit = window.googletag
-            ?.defineOutOfPageSlot(adUnitPath, slotId)
-            ?.addService(window?.googletag?.pubads());
+          unit = gtag.createOutOfPageSlot(adUnitPath, slotId);
         } else {
-          unit = window.googletag
-            ?.defineSlot(adUnitPath, sizes, slotId)
-            ?.addService(window?.googletag?.pubads());
+          unit = gtag.createSlot(adUnitPath, sizes, slotId);
         }
 
         if (sizeMapping) {
-          const mapping = window.googletag?.sizeMapping();
+          const mapping = gtag.getMapping();
           sizeMapping.forEach(({ viewport, sizes }) => {
             mapping.addSize(viewport, sizes);
           });
@@ -48,19 +45,10 @@ const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
             unit.setTargeting(tagetingKey, targetingArguments[tagetingKey]);
           });
         }
-        if (onSlotLoad) {
-          window.googletag?.pubads().addEventListener('slotOnload', onSlotLoad);
-        }
-        if (onSlotIsViewable) {
-          window.googletag
-            ?.pubads()
-            .addEventListener('impressionViewable', onSlotIsViewable);
-        }
-        if (onSlotRenderEnded) {
-          window.googletag
-            ?.pubads()
-            .addEventListener('slotRenderEnded', onSlotRenderEnded);
-        }
+        if (onSlotLoad) gtag.handleSlotLoad(onSlotLoad);
+        if (onSlotIsViewable) gtag.handleSlotIsViewable(onSlotIsViewable);
+        if (onSlotRenderEnded) gtag.handleSlotRenderEnded(onSlotRenderEnded);
+
         if (fallback && fallback !== 'default') {
           switch (fallback) {
             case 'expand': {
@@ -80,9 +68,7 @@ const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
           }
         }
         slotId && addUnit({ slotId, unit });
-        // Enable the PubAdsService.
-        window.googletag?.enableServices();
-        window?.googletag?.display(slotId);
+        gtag.enableService(slotId);
       });
     }
   }, [isLoaded]);
@@ -108,4 +94,4 @@ const useGPTSlotInternal = (props: GPTSlotProps & { isLoaded: boolean }) => {
   return { style: getStyle() };
 };
 
-export { useGPTSlotInternal };
+export { useGPTSlot };

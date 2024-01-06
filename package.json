@@ -47,8 +47,8 @@
   },
   "peerDependencies": {
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0",
-    "react-router-dom": ">=18.0.0"
+    "react-dom": ">=16.8.0",
+    "react-router-dom": ">=16.8.0"
   },
   "repository": {
     "type": "git",
