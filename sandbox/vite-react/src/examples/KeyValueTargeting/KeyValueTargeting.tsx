@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
 import { GPTProvider, GPTSlot, useGPT } from '../../../../../dist';
 
-const SLOT = {
-  BANNER_AD_1: 'banner-ad-1',
-  BANNER_AD_2: 'banner-ad-2',
-} as const;
-
 /**
  * Optional typing for page level targeting
  */
