@@ -31,7 +31,7 @@ export type Size = readonly [number, number];
  * - A basic Ad size (width X height)
  * - An array of basic Ad sizes (width X height) corresponding to the viewport
  */
-export type Sizes = string | Size | Size[];
+export type Sizes = string | Size | (string | Size)[];
 
 /**
  * A combination of viewport definitions and ad sizes for responsive ads
