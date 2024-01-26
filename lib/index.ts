@@ -5,6 +5,7 @@ import type {
   SlotViewableEvent,
   SlotRenderEndedEvent,
   Sizes,
+  Size,
 } from './types';
 
 import { GPTProvider } from './components/GPTProvider/GPTProvider';
@@ -19,5 +20,6 @@ export type {
   SlotViewableEvent,
   SlotRenderEndedEvent,
   Sizes,
+  Size,
 };
 export { GPTProvider, GPTSlot, useGPT, GUIDELINES };
