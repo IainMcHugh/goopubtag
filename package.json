@@ -18,7 +18,8 @@
     "sandbox:vite:start": "vite preview sandbox/vite-react --port 8080 --c sandbox/vite-react/vite.config.ts",
     "docs:dev": "next docs",
     "docs:build": "next build docs",
-    "docs:start": "next start docs"
+    "docs:start": "next start docs",
+    "release": "pnpm run build && changeset publish"
   },
   "keywords": [
     "react",
