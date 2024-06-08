@@ -1,5 +1,11 @@
 # goopubtag
 
+## 0.0.6
+
+### Patch Changes
+
+- 5ab382a: Updating all packages
+
 ## 0.0.5
 
 ### Patch Changes
