@@ -1,12 +1,12 @@
 import { createContext, useContext } from "react";
 
+import type { Attributes } from "../../types";
+import { GPTDev } from "../GPTDevIcon/GPTDev";
 import type {
-	GPTContext as TGPTContext,
 	GPTProviderProps,
+	GPTContext as TGPTContext,
 } from "./GPTProvider.type";
 import { useGPTProvider } from "./useGPTProvider";
-import { GPTDev } from "../GPTDevIcon/GPTDev";
-import { Attributes } from "../../types";
 
 const GPTContext = createContext<TGPTContext<any>>({} as TGPTContext<any>);
 
