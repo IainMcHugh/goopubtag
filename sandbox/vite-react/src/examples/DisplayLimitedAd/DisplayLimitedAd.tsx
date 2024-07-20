@@ -20,7 +20,7 @@ const Component = () => {
 	useEffect(() => {
 		setPrivacySettings({ limitedAds });
 		refresh();
-	}, [limitedAds]);
+	}, [limitedAds, refresh, setPrivacySettings]);
 
 	return (
 		<div>

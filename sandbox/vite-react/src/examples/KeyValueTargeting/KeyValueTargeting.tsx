@@ -62,7 +62,14 @@ const Component = () => {
 			clearTargetingAttributes<BannerAd1>("banner-ad-1", ["color"]);
 		}
 		refresh();
-	}, [toggle]);
+	}, [
+		toggle,
+		clearPageTargetingAttributes,
+		clearTargetingAttributes,
+		refresh,
+		setPageTargetingAttributes,
+		setTargetingAttributes,
+	]);
 	return (
 		<div>
 			<p>Key value targeting</p>

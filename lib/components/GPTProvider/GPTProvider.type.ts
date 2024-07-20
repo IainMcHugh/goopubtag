@@ -19,7 +19,7 @@ type SharedContextProps<PageAttributes extends Attributes = Attributes> =
 		debug?: boolean;
 	};
 
-export type GPTContext<PageAttributes extends Attributes> =
+export type GPTContext<PageAttributes extends Attributes = Attributes> =
 	SharedContextProps<PageAttributes> & {
 		isLoaded: boolean;
 		addUnit: (unit: Unit) => void;

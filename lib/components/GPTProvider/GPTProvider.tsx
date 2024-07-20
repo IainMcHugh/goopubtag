@@ -8,7 +8,7 @@ import type {
 } from "./GPTProvider.type";
 import { useGPTProvider } from "./useGPTProvider";
 
-const GPTContext = createContext<TGPTContext<any>>({} as TGPTContext<any>);
+const GPTContext = createContext<TGPTContext>({} as TGPTContext);
 
 /**
  * The `GPTProvider` is required to initialize GPT as well as for rendering `GPTSlots` in the DOM.
