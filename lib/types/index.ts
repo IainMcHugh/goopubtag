@@ -108,7 +108,7 @@ export type Mapping = {
 /**
  * Enables lazy loading in GPT as defined by the config object. For more detailed examples, see the {@link https://developers.google.com/publisher-tag/samples/lazy-loading Lazy loading sample}.
  */
-type LazyLoad = {
+export type LazyLoad = {
   /**
    *  Fetch slots within 5 viewports.
    */

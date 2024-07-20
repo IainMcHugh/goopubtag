@@ -1,9 +1,17 @@
 import React from 'react';
 import { GPTProvider, GPTSlot } from '../../../../../dist';
 
-const DisplayTestAd = () => {
+const LazyLoad = () => {
   return (
-    <GPTProvider networkId={6355419} debug={true}>
+    <GPTProvider
+      networkId={6355419}
+      debug={true}
+      lazyLoad={{
+        fetchMarginPercent: 500,
+        mobileScaling: 2.0,
+        renderMarginPercent: 200,
+      }}
+    >
       <Component />
     </GPTProvider>
   );
@@ -12,7 +20,7 @@ const DisplayTestAd = () => {
 const Component = () => {
   return (
     <div>
-      <p>Display test ad</p>
+      <p>Lazy load</p>
       <GPTSlot
         slotId="banner-ad"
         adUnit="Travel/Europe/France/Paris"
@@ -22,4 +30,4 @@ const Component = () => {
   );
 };
 
-export { DisplayTestAd };
+export { LazyLoad };

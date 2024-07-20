@@ -22,6 +22,7 @@ const useGPTProvider = <PageAttributes extends Attributes>(
     fallback = 'default',
     targetingArguments,
     outOfPage,
+    lazyLoad,
   } = props;
 
   const addUnit = (unit: Unit) => setUnits((prev) => [...prev, unit]);
@@ -61,6 +62,10 @@ const useGPTProvider = <PageAttributes extends Attributes>(
           Object.keys(targetingArguments).forEach((targetingKey) => {
             gtag.setTargeting(targetingKey, targetingArguments[targetingKey]);
           });
+        }
+
+        if (lazyLoad !== undefined) {
+          gtag.enableLazyLoad(lazyLoad);
         }
 
         gtag.handleFallback(fallback);

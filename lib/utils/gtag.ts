@@ -4,6 +4,7 @@
 
 import type {
   Collapse,
+  LazyLoad,
   Mapping,
   OutOfPage,
   PrivacySettings,
@@ -157,6 +158,14 @@ const enableService = (slotId: string): void => {
   window?.googletag?.display(slotId);
 };
 
+const enableLazyLoad = (lazyLoad: boolean | LazyLoad): void => {
+  if (typeof lazyLoad === 'boolean') {
+    window.googletag?.pubads().enableLazyLoad();
+  } else {
+    window.googletag?.pubads().enableLazyLoad(lazyLoad);
+  }
+};
+
 export const gtag = {
   push,
   getAdUnitPath,
@@ -178,4 +187,5 @@ export const gtag = {
   refresh,
   addService,
   enableService,
+  enableLazyLoad,
 };
