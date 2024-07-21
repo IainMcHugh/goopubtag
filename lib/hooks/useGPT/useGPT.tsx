@@ -30,7 +30,7 @@ const useGPT = <
 		gtag.push(() => {
 			const unit = units.find((unit) => unit.slotId === slotId)?.unit;
 			for (const targetingKey of Object.keys(attributes)) {
-				unit.setTargeting(targetingKey, attributes[targetingKey]);
+				unit?.setTargeting(targetingKey, attributes[targetingKey]);
 			}
 		});
 	};
@@ -65,9 +65,9 @@ const useGPT = <
 			const unit = units.find((unit) => unit.slotId === slotId)?.unit;
 			if (attributes) {
 				for (const targetingKey of attributes) {
-					unit.clearTargeting(targetingKey);
+					unit?.clearTargeting(targetingKey as string);
 				}
-			} else unit.clearTargeting();
+			} else unit?.clearTargeting();
 		});
 	};
 

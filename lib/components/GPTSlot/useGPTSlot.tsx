@@ -1,5 +1,6 @@
 import { type CSSProperties, useEffect } from "react";
 
+import type { Slot } from "../../types";
 import { gtag } from "../../utils/gtag";
 import { useGPTContext } from "../GPTProvider/GPTProvider";
 import type { UseGPTSlotProps } from "./GPTSlot.type";
@@ -24,51 +25,52 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 	useEffect(() => {
 		if (isLoaded) {
 			gtag.push(() => {
-				let unit: any = null;
+				let unit: Slot | null = null;
 				if (outOfPage) {
 					unit = gtag.createOutOfPageSlot(adUnitPath, slotId);
 				} else {
 					unit = gtag.createSlot(adUnitPath, sizes, slotId);
 				}
-
-				if (sizeMapping) {
-					const mapping = gtag.getMapping();
-					for (const { viewport, sizes } of sizeMapping) {
-						mapping.addSize(viewport, sizes);
-					}
-					mapping.build();
-					unit.defineSizeMapping(mapping);
-				}
-
-				if (targetingArguments) {
-					for (const targetingKey of Object.keys(targetingArguments)) {
-						unit.setTargeting(targetingKey, targetingArguments[targetingKey]);
-					}
-				}
-				if (onSlotLoad) gtag.handleSlotLoad(onSlotLoad);
-				if (onSlotIsViewable) gtag.handleSlotIsViewable(onSlotIsViewable);
-				if (onSlotRenderEnded) gtag.handleSlotRenderEnded(onSlotRenderEnded);
-
-				if (fallback && fallback !== "default") {
-					switch (fallback) {
-						case "expand": {
-							unit.setCollapseEmptyDiv(true, true);
-							break;
+				if (unit !== null) {
+					if (sizeMapping) {
+						const mapping = gtag.getMapping();
+						for (const { viewport, sizes } of sizeMapping) {
+							mapping.addSize(viewport, sizes);
 						}
-						case "expand_strict": {
-							unit.setCollapseEmptyDiv(false);
-							break;
-						}
-						case "collapse": {
-							unit.setCollapseEmptyDiv(true);
-							break;
-						}
-						default:
-							break;
+						mapping.build();
+						unit.defineSizeMapping(mapping);
 					}
+
+					if (targetingArguments) {
+						for (const targetingKey of Object.keys(targetingArguments)) {
+							unit.setTargeting(targetingKey, targetingArguments[targetingKey]);
+						}
+					}
+					if (onSlotLoad) gtag.handleSlotLoad(onSlotLoad);
+					if (onSlotIsViewable) gtag.handleSlotIsViewable(onSlotIsViewable);
+					if (onSlotRenderEnded) gtag.handleSlotRenderEnded(onSlotRenderEnded);
+
+					if (fallback && fallback !== "default") {
+						switch (fallback) {
+							case "expand": {
+								unit.setCollapseEmptyDiv(true, true);
+								break;
+							}
+							case "expand_strict": {
+								unit.setCollapseEmptyDiv(false);
+								break;
+							}
+							case "collapse": {
+								unit.setCollapseEmptyDiv(true);
+								break;
+							}
+							default:
+								break;
+						}
+					}
+					slotId && addUnit({ slotId, unit });
+					gtag.enableService(slotId);
 				}
-				slotId && addUnit({ slotId, unit });
-				gtag.enableService(slotId);
 			});
 		}
 	}, [

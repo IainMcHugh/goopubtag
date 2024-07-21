@@ -81,13 +81,17 @@ export type AnchorSettings = Pick<SlotUnit, "adUnit" | "targetingArguments"> & {
 	position: "top" | "bottom";
 };
 
+type RewardedOnReadyEvent = {
+	makeRewardedVisible: () => void;
+};
+
 export type RewardedSettings = Pick<
 	SlotUnit,
 	"adUnit" | "targetingArguments"
 > & {
-	onReady?: (event: any) => void;
-	onClosed?: (event: any) => void;
-	onGranted?: (event: any) => void;
+	onReady?: (event: RewardedOnReadyEvent) => void;
+	onClosed?: (event: unknown) => void;
+	onGranted?: (event: unknown) => void;
 };
 
 export type OutOfPageTypes =
@@ -125,12 +129,12 @@ type LazyLoad = {
 
 type SlotRender = {
 	// complete
-	getSlotElementId: (...args: unknown[]) => unknown;
+	getSlotElementId: () => string;
 };
 
 type SlotVisibilityChanged = {
 	// complete
-	getSlotElementId: Function;
+	getSlotElementId: () => string;
 };
 
 type Event<T> = {
@@ -268,6 +272,18 @@ export type SlotUnit<A extends UnitTargeting = UnitTargeting> = GPT<
 	 * @returns
 	 */
 	onSlotRenderEnded?: (event: SlotRenderEndedEvent) => void;
+};
+
+export type Slot = {
+	collapseEmptyDivs(a?: boolean): void;
+	addEventListener(...args: unknown[]): void;
+	clearTargeting(k?: string): void;
+	setPrivacySettings(s: Partial<PrivacySettings>): void;
+	refresh: (...args: unknown[]) => unknown;
+	setTargeting(k: string, v: string | Array<string>): void;
+	addService(...args: unknown[]): unknown;
+	defineSizeMapping(mapping: Mapping): void;
+	setCollapseEmptyDiv(a?: boolean, b?: boolean): void;
 };
 
 export type GetKeys<T extends Attributes> = Extract<keyof T, "string">;

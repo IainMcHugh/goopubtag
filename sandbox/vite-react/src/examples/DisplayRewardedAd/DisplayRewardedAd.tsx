@@ -1,8 +1,8 @@
 import React from "react";
-import { GPTProvider, GPTSlot } from "../../../../../dist";
+import { GPTProvider } from "../../../../../dist";
 
 const DisplayRewardedAd = () => {
-	const handleReady = (event: any) => {
+	const handleReady = (event: { makeRewardedVisible: () => void }) => {
 		event.makeRewardedVisible();
 	};
 	return (

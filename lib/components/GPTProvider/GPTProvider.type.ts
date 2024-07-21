@@ -1,4 +1,9 @@
-import type { Attributes, ChildrenWithProps, SlotProvider } from "../../types";
+import type {
+	Attributes,
+	ChildrenWithProps,
+	Slot,
+	SlotProvider,
+} from "../../types";
 
 /**
  * A GPT Unit that is established
@@ -11,7 +16,7 @@ export type Unit = {
 	/**
 	 * The unit itself
 	 */
-	unit: any;
+	unit: Slot;
 };
 
 type SharedContextProps<PageAttributes extends Attributes = Attributes> =

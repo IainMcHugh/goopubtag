@@ -8,12 +8,13 @@ import type {
 	OutOfPage,
 	PrivacySettings,
 	Sizes,
+	Slot,
 	SlotLoadEvent,
 	SlotRenderEndedEvent,
 	SlotViewableEvent,
 } from "../types";
 
-const push = (fn: Function): void => {
+const push = (fn: () => void): void => {
 	window.googletag?.cmd.push(fn);
 };
 
@@ -25,28 +26,28 @@ const expand = (): void => {
 	window.googletag?.pubads().collapseEmptyDivs(true);
 };
 
-const getTopAnchor = (): string => {
-	return window.googletag?.enums.OutOfPageFormat.TOP_ANCHOR;
+const getTopAnchor = (): string | null => {
+	return window.googletag?.enums.OutOfPageFormat.TOP_ANCHOR || null;
 };
 
-const getBottomAnchor = (): string => {
-	return window.googletag?.enums.OutOfPageFormat.BOTTOM_ANCHOR;
+const getBottomAnchor = (): string | null => {
+	return window.googletag?.enums.OutOfPageFormat.BOTTOM_ANCHOR || null;
 };
 
-const getRewarded = (): string => {
-	return window.googletag?.enums.OutOfPageFormat.REWARDED;
+const getRewarded = (): string | null => {
+	return window.googletag?.enums.OutOfPageFormat.REWARDED || null;
 };
 
 const getOutOfPageSlotId = (outOfPage: OutOfPage): string | null => {
 	switch (outOfPage.type) {
 		case "anchor": {
 			if (outOfPage.settings.position === "top") {
-				return window.googletag?.enums.OutOfPageFormat.TOP_ANCHOR;
+				return window.googletag?.enums.OutOfPageFormat.TOP_ANCHOR || null;
 			}
-			return window.googletag?.enums.OutOfPageFormat.BOTTOM_ANCHOR;
+			return window.googletag?.enums.OutOfPageFormat.BOTTOM_ANCHOR || null;
 		}
 		case "rewarded": {
-			return window.googletag?.enums.OutOfPageFormat.REWARDED;
+			return window.googletag?.enums.OutOfPageFormat.REWARDED || null;
 		}
 
 		default: {
@@ -58,10 +59,12 @@ const getOutOfPageSlotId = (outOfPage: OutOfPage): string | null => {
 const createOutOfPageSlot = (
 	adUnitPath: string,
 	slotId: string | null,
-): any => {
-	return window.googletag
-		?.defineOutOfPageSlot(adUnitPath, slotId)
-		?.addService(window?.googletag?.pubads());
+): Slot | null => {
+	return (
+		window.googletag
+			?.defineOutOfPageSlot(adUnitPath, slotId)
+			?.addService(window?.googletag?.pubads()) || null
+	);
 };
 
 const handleRewarded = (outOfPage: OutOfPage): void => {
@@ -107,7 +110,7 @@ const clearTargeting = (key?: string): void => {
 	else window.googletag?.pubads().clearTargeting();
 };
 
-const addService = (unit: any): void => {
+const addService = (unit: Slot): void => {
 	unit.addService(window.googletag?.pubads());
 };
 
@@ -126,10 +129,14 @@ const refresh = (adSlots?: string[]): void => {
 	else window.googletag?.pubads().refresh();
 };
 
-const createSlot = (adUnitPath: string, sizes: Sizes, slotId: string): void =>
+const createSlot = (
+	adUnitPath: string,
+	sizes: Sizes,
+	slotId: string,
+): Slot | null =>
 	window.googletag
 		?.defineSlot(adUnitPath, sizes, slotId)
-		?.addService(window.googletag?.pubads());
+		?.addService(window.googletag?.pubads()) || null;
 
 const getMapping = (): Mapping => window.googletag?.sizeMapping();
 
