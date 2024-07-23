@@ -73,7 +73,7 @@ const useGPTProvider = <PageAttributes extends Attributes>(
 				gtag.handleFallback(fallback);
 			});
 		}
-	}, [isLoaded, fallback, outOfPage, targetingArguments, networkId]);
+	}, [isLoaded, fallback, outOfPage, targetingArguments, networkId, lazyLoad]);
 
 	return {
 		isLoaded,
