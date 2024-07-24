@@ -11,21 +11,25 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 		sizes,
 		sizeMapping,
 		slotId,
-		isLoaded,
 		targetingArguments,
 		onSlotLoad,
+		onSlotRequested,
 		onSlotIsViewable,
 		onSlotRenderEnded,
 		fallback = "default",
 		outOfPage = false,
 	} = props;
-	const { networkId, addUnit } = useGPTContext();
+	const { networkId, units, isLoaded, addUnit } = useGPTContext();
 	const adUnitPath = gtag.getAdUnitPath(networkId, adUnit);
 
 	useEffect(() => {
 		if (isLoaded) {
 			gtag.push(() => {
 				let unit: Slot | null = null;
+				const isAlreadyDefined = units.find((u) => u.slotId === slotId);
+
+				if (isAlreadyDefined) return;
+
 				if (outOfPage) {
 					unit = gtag.createOutOfPageSlot(adUnitPath, slotId);
 				} else {
@@ -47,6 +51,7 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 						}
 					}
 					if (onSlotLoad) gtag.handleSlotLoad(onSlotLoad);
+					if (onSlotRequested) gtag.handleSlotRequested(onSlotRequested);
 					if (onSlotIsViewable) gtag.handleSlotIsViewable(onSlotIsViewable);
 					if (onSlotRenderEnded) gtag.handleSlotRenderEnded(onSlotRenderEnded);
 
@@ -84,8 +89,10 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 		sizes,
 		addUnit,
 		onSlotLoad,
+		onSlotRequested,
 		onSlotIsViewable,
 		onSlotRenderEnded,
+		units,
 	]);
 
 	const getStyle = (): CSSProperties => {
@@ -102,8 +109,8 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 			};
 		}
 		return {
-			width: sizes[0] as number,
-			height: sizes[1] as number,
+			width: `${sizes[0] as number}px`,
+			height: `${sizes[1] as number}px`,
 		};
 	};
 	return { style: getStyle() };

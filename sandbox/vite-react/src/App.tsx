@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router-dom";
 
 function App() {
@@ -54,6 +55,10 @@ function App() {
 				<br />
 				<Link to={"/examples/display-rewarded-ad"} reloadDocument>
 					Display rewarded ad
+				</Link>
+				<br />
+				<Link to={"/examples/lazy-load"} reloadDocument>
+					Lazy load
 				</Link>
 				<br />
 			</div>

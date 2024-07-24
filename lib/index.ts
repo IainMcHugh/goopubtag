@@ -4,6 +4,7 @@ import type {
 	Size,
 	Sizes,
 	SlotLoadEvent,
+	SlotRequestEvent,
 	SlotRenderEndedEvent,
 	SlotViewableEvent,
 } from "./types";
@@ -17,6 +18,7 @@ export type {
 	GPTSlotProps,
 	GPTProviderProps,
 	SlotLoadEvent,
+	SlotRequestEvent,
 	SlotViewableEvent,
 	SlotRenderEndedEvent,
 	Sizes,
