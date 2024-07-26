@@ -4,6 +4,7 @@ import type { Slot } from "../../types";
 import { gtag } from "../../utils/gtag";
 import { useGPTContext } from "../GPTProvider/GPTProvider";
 import type { UseGPTSlotProps } from "./GPTSlot.type";
+import { subscribe, unsubscribe } from "../../utils/events";
 
 const useGPTSlot = (props: UseGPTSlotProps) => {
 	const {
@@ -19,7 +20,7 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 		fallback = "default",
 		outOfPage = false,
 	} = props;
-	const { networkId, units, isLoaded, addUnit } = useGPTContext();
+	const { networkId, units, isLoaded, lazyLoad, addUnit } = useGPTContext();
 	const adUnitPath = gtag.getAdUnitPath(networkId, adUnit);
 
 	useEffect(() => {
@@ -50,10 +51,40 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 							unit.setTargeting(targetingKey, targetingArguments[targetingKey]);
 						}
 					}
-					if (onSlotLoad) gtag.handleSlotLoad(onSlotLoad);
-					if (onSlotRequested) gtag.handleSlotRequested(onSlotRequested);
-					if (onSlotIsViewable) gtag.handleSlotIsViewable(onSlotIsViewable);
-					if (onSlotRenderEnded) gtag.handleSlotRenderEnded(onSlotRenderEnded);
+					if (lazyLoad !== undefined) {
+						gtag.enableLazyLoad(lazyLoad);
+					}
+
+					gtag.handleSlotLoad((e) => {
+						if (onSlotLoad && e.slot.getSlotElementId() === slotId) {
+							onSlotLoad(e);
+						}
+					});
+
+					if (onSlotLoad) {
+						subscribe("slot_load", (event) => {
+							const id = event.slot.getSlotElementId();
+							if (id === slotId) onSlotLoad(event);
+						});
+					}
+					if (onSlotRequested) {
+						subscribe("slot_requested", (event) => {
+							const id = event.slot.getSlotElementId();
+							if (id === slotId) onSlotRequested(event);
+						});
+					}
+					if (onSlotIsViewable) {
+						subscribe("impression_viewable", (event) => {
+							const id = event.slot.getSlotElementId();
+							if (id === slotId) onSlotIsViewable(event);
+						});
+					}
+					if (onSlotRenderEnded) {
+						subscribe("slot_render_ended", (event) => {
+							const id = event.slot.getSlotElementId();
+							if (id === slotId) onSlotRenderEnded(event);
+						});
+					}
 
 					if (fallback && fallback !== "default") {
 						switch (fallback) {
@@ -78,6 +109,16 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 				}
 			});
 		}
+
+		return () => {
+			/** Cleanup */
+			if (onSlotLoad) unsubscribe("slot_load", onSlotLoad);
+			if (onSlotRequested) unsubscribe("slot_requested", onSlotRequested);
+			if (onSlotIsViewable)
+				unsubscribe("impression_viewable", onSlotIsViewable);
+			if (onSlotRenderEnded)
+				unsubscribe("slot_render_ended", onSlotRenderEnded);
+		};
 	}, [
 		isLoaded,
 		outOfPage,
@@ -87,12 +128,13 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 		adUnitPath,
 		fallback,
 		sizes,
+		units,
+		lazyLoad,
 		addUnit,
 		onSlotLoad,
 		onSlotRequested,
 		onSlotIsViewable,
 		onSlotRenderEnded,
-		units,
 	]);
 
 	const getStyle = (): CSSProperties => {

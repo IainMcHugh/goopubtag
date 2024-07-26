@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { GPTProvider, GPTSlot } from "../../../../../dist";
 import type { SlotLoadEvent, SlotRequestEvent } from "../../../../../dist";
 
@@ -23,32 +23,44 @@ const LazyLoad = () => {
 };
 
 const Component = () => {
+	const [first, setFirst] = useState({ f: false, r: false });
+	const [second, setSecond] = useState({ f: false, r: false });
+	const [third, setThird] = useState({ f: false, r: false });
+
 	const onFirstRequested = (event: SlotRequestEvent) => {
 		const id = event.slot.getSlotElementId();
 		console.log(`${id} - fetched`);
+		setFirst((p) => ({ ...p, f: true }));
 	};
 	const onFirstLoad = (event: SlotLoadEvent) => {
 		const id = event.slot.getSlotElementId();
 		console.log(`${id} - rendered`);
+		setFirst((p) => ({ ...p, r: true }));
 	};
 	const onSecondRequested = (event: SlotRequestEvent) => {
 		const id = event.slot.getSlotElementId();
 		console.log(`${id} - fetched`);
+		setSecond((p) => ({ ...p, f: true }));
 	};
 	const onSecondLoad = (event: SlotLoadEvent) => {
 		const id = event.slot.getSlotElementId();
 		console.log(`${id} - rendered`);
+		setSecond((p) => ({ ...p, r: true }));
 	};
 	const onThirdRequested = (event: SlotRequestEvent) => {
 		const id = event.slot.getSlotElementId();
 		console.log(`${id} - fetched`);
+		setThird((p) => ({ ...p, f: true }));
 	};
 	const onThirdLoad = (event: SlotLoadEvent) => {
 		const id = event.slot.getSlotElementId();
 		console.log(`${id} - rendered`);
+		setThird((p) => ({ ...p, r: true }));
 	};
+
+	const yesOrNo = (v: boolean) => (v ? "Yes" : "No");
 	return (
-		<div style={{ width: "100%", overflow: "hidden" }}>
+		<div style={{ width: "100%", overflow: "hidden", marginTop: "125px" }}>
 			<p>Lazy load</p>
 			<GPTSlot
 				slotId="div-1"
@@ -86,18 +98,18 @@ const Component = () => {
 						</tr>
 						<tr>
 							<td className="slot-name">Ad Slot 1</td>
-							<td id="div-1-fetched">No</td>
-							<td id="div-1-rendered">No</td>
+							<td id="div-1-fetched">{yesOrNo(first.f)}</td>
+							<td id="div-1-rendered">{yesOrNo(first.r)}</td>
 						</tr>
 						<tr>
 							<td className="slot-name">Ad Slot 2</td>
-							<td id="div-2-fetched">No</td>
-							<td id="div-2-rendered">No</td>
+							<td id="div-2-fetched">{yesOrNo(second.f)}</td>
+							<td id="div-2-rendered">{yesOrNo(second.r)}</td>
 						</tr>
 						<tr>
 							<td className="slot-name">Ad Slot 3</td>
-							<td id="div-3-fetched">No</td>
-							<td id="div-3-rendered">No</td>
+							<td id="div-3-fetched">{yesOrNo(third.f)}</td>
+							<td id="div-3-rendered">{yesOrNo(third.r)}</td>
 						</tr>
 					</tbody>
 				</table>

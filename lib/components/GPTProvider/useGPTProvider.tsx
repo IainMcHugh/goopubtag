@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
-import type { Attributes, SlotProvider } from "../../types";
+import type { Attributes, SlotLoadEvent, SlotProvider } from "../../types";
 import { getGPTScript } from "../../utils";
+import { dispatchEvent } from "../../utils/events";
 import { gtag } from "../../utils/gtag";
 import type { Unit } from "./GPTProvider.type";
 
@@ -66,15 +67,27 @@ const useGPTProvider = <PageAttributes extends Attributes>(
 					}
 				}
 
-				if (lazyLoad !== undefined) {
-					gtag.enableLazyLoad(lazyLoad);
-				}
+				gtag.handleSlotLoad((detail) => {
+					dispatchEvent("slot_load", detail);
+				});
+
+				gtag.handleSlotRequested((detail) => {
+					dispatchEvent("slot_requested", detail);
+				});
+
+				gtag.handleSlotIsViewable((detail) => {
+					dispatchEvent("impression_viewable", detail);
+				});
+
+				gtag.handleSlotRenderEnded((detail) => {
+					dispatchEvent("slot_render_ended", detail);
+				});
 
 				gtag.handleFallback(fallback);
 				// gtag.enableSingleRequest();
 			});
 		}
-	}, [isLoaded, fallback, outOfPage, targetingArguments, networkId, lazyLoad]);
+	}, [isLoaded, fallback, outOfPage, targetingArguments, networkId]);
 
 	return {
 		isLoaded,
