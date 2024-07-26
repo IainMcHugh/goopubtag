@@ -1,5 +1,13 @@
 # goopubtag
 
+## 0.1.0
+
+### Minor Changes
+
+- d68f04a: - Add the ability to lazy load units
+  - Reduce re-renders with memoization
+  - Fix bug in event listeners
+
 ## 0.0.6
 
 ### Patch Changes
