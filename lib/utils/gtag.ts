@@ -4,6 +4,7 @@
 
 import type {
 	Collapse,
+	LazyLoad,
 	Mapping,
 	OutOfPage,
 	PrivacySettings,
@@ -11,6 +12,7 @@ import type {
 	Slot,
 	SlotLoadEvent,
 	SlotRenderEndedEvent,
+	SlotRequestEvent,
 	SlotViewableEvent,
 } from "../types";
 
@@ -133,22 +135,33 @@ const createSlot = (
 	adUnitPath: string,
 	sizes: Sizes,
 	slotId: string,
-): Slot | null =>
-	window.googletag
-		?.defineSlot(adUnitPath, sizes, slotId)
-		?.addService(window.googletag?.pubads()) || null;
+): Slot | null => {
+	return (
+		window.googletag
+			?.defineSlot(adUnitPath, sizes, slotId)
+			?.addService(window.googletag?.pubads()) || null
+	);
+};
 
 const getMapping = (): Mapping => window.googletag?.sizeMapping();
 
-const handleSlotLoad = (onSlotLoad: (event: SlotLoadEvent) => void): void =>
+const handleSlotLoad = (onSlotLoad: (event: SlotLoadEvent) => void): void => {
 	window.googletag?.pubads().addEventListener("slotOnload", onSlotLoad);
+};
+
+const handleSlotRequested = (
+	onSlotRequested: (event: SlotRequestEvent) => void,
+): void => {
+	window.googletag?.pubads().addEventListener("slotRequested", onSlotRequested);
+};
 
 const handleSlotIsViewable = (
 	onSlotIsViewable: (event: SlotViewableEvent) => void,
-): void =>
+): void => {
 	window.googletag
 		?.pubads()
 		.addEventListener("impressionViewable", onSlotIsViewable);
+};
 
 const handleSlotRenderEnded = (
 	onSlotRenderEnded: (event: SlotRenderEndedEvent) => void,
@@ -161,6 +174,18 @@ const handleSlotRenderEnded = (
 const enableService = (slotId: string): void => {
 	window.googletag?.enableServices();
 	window?.googletag?.display(slotId);
+};
+
+const enableSingleRequest = () => {
+	window.googletag?.pubads().enableSingleRequest();
+};
+
+const enableLazyLoad = (lazyLoad: boolean | LazyLoad): void => {
+	if (typeof lazyLoad === "boolean") {
+		window.googletag?.pubads().enableLazyLoad();
+	} else {
+		window.googletag?.pubads().enableLazyLoad(lazyLoad);
+	}
 };
 
 export const gtag = {
@@ -176,6 +201,7 @@ export const gtag = {
 	handleRewarded,
 	handleFallback,
 	handleSlotLoad,
+	handleSlotRequested,
 	handleSlotIsViewable,
 	handleSlotRenderEnded,
 	setTargeting,
@@ -184,4 +210,6 @@ export const gtag = {
 	refresh,
 	addService,
 	enableService,
+	enableSingleRequest,
+	enableLazyLoad,
 };

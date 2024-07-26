@@ -112,7 +112,7 @@ export type Mapping = {
 /**
  * Enables lazy loading in GPT as defined by the config object. For more detailed examples, see the {@link https://developers.google.com/publisher-tag/samples/lazy-loading Lazy loading sample}.
  */
-type LazyLoad = {
+export type LazyLoad = {
 	/**
 	 *  Fetch slots within 5 viewports.
 	 */
@@ -143,6 +143,7 @@ type Event<T> = {
 };
 
 export type SlotLoadEvent = Event<SlotRender>;
+export type SlotRequestEvent = Event<SlotRender>;
 export type SlotRenderEndedEvent = Event<SlotRender>;
 export type SlotViewableEvent = Event<SlotVisibilityChanged>;
 
@@ -260,6 +261,12 @@ export type SlotUnit<A extends UnitTargeting = UnitTargeting> = GPT<
 	 * @returns
 	 */
 	onSlotLoad?: (event: SlotLoadEvent) => void;
+	/**
+	 * A callback for when the slot is successfully requested
+	 * @param event The slot requested event
+	 * @returns
+	 */
+	onSlotRequested?: (event: SlotRequestEvent) => void;
 	/**
 	 * A callback for when the slot is viewable on the page
 	 * @param event The slot is viewable event

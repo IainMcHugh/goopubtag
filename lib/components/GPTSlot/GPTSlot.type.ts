@@ -5,4 +5,4 @@ export type GPTSlotProps<A extends UnitTargeting = UnitTargeting> =
 		className?: string;
 	};
 
-export type UseGPTSlotProps = GPTSlotProps & { isLoaded: boolean };
+export type UseGPTSlotProps = GPTSlotProps;

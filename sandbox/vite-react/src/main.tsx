@@ -13,6 +13,7 @@ import { DisplayRewardedAd } from "./examples/DisplayRewardedAd/DisplayRewardedA
 import { DisplayTestAd } from "./examples/DisplayTestAd/DisplayTestAd";
 import { KeyValueTargeting } from "./examples/KeyValueTargeting/KeyValueTargeting";
 import { Refresh } from "./examples/Refresh/Refresh";
+import { LazyLoad } from "./examples/LazyLoad/LazyLoad";
 
 const router = createBrowserRouter([
 	{
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
 	{
 		path: "/examples/display-rewarded-ad",
 		element: <DisplayRewardedAd />,
+	},
+	{
+		path: "/examples/lazy-load",
+		element: <LazyLoad />,
 	},
 ]);
 

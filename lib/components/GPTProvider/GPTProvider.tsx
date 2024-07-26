@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useMemo } from "react";
 
 import type { Attributes } from "../../types";
 import { GPTDev } from "../GPTDevIcon/GPTDev";
@@ -19,12 +19,13 @@ const GPTContext = createContext<TGPTContext>({} as TGPTContext);
 const GPTProvider = <PageAttributes extends Attributes>(
 	props: GPTProviderProps<PageAttributes>,
 ) => {
-	const { children, ...passedProps } = props;
-	const computedProps = useGPTProvider(passedProps);
+	const { children, ...rest } = props;
+	const goopub = useGPTProvider(rest);
+	const memoized = useMemo(() => goopub, [goopub]);
 	return (
-		<GPTContext.Provider value={{ ...passedProps, ...computedProps }}>
+		<GPTContext.Provider value={{ ...rest, ...memoized }}>
 			{children}
-			{passedProps.debug && <GPTDev />}
+			{rest.debug && <GPTDev />}
 		</GPTContext.Provider>
 	);
 };
