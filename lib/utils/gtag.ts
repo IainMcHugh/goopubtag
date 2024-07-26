@@ -150,7 +150,6 @@ const handleSlotLoad = (onSlotLoad: (event: SlotLoadEvent) => void): void => {
 };
 
 const handleSlotRequested = (
-	// TODO: Fix event type
 	onSlotRequested: (event: SlotRequestEvent) => void,
 ): void => {
 	window.googletag?.pubads().addEventListener("slotRequested", onSlotRequested);

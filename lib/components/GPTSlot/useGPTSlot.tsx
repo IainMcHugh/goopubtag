@@ -55,12 +55,6 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 						gtag.enableLazyLoad(lazyLoad);
 					}
 
-					gtag.handleSlotLoad((e) => {
-						if (onSlotLoad && e.slot.getSlotElementId() === slotId) {
-							onSlotLoad(e);
-						}
-					});
-
 					if (onSlotLoad) {
 						subscribe("slot_load", (event) => {
 							const id = event.slot.getSlotElementId();
