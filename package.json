@@ -1,11 +1,13 @@
 {
 	"name": "goopubtag",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "React library for Google Publisher tag",
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"scripts": {
 		"build": "tsup index.ts --format cjs,esm --dts",
 		"build:prod": "tsup index.ts --format cjs,esm --dts --minify",
