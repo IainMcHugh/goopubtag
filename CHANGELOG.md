@@ -1,5 +1,11 @@
 # goopubtag
 
+## 0.2.0
+
+### Minor Changes
+
+- a89e501: - Built using tsup minify flag, reducing build size
+
 ## 0.1.0
 
 ### Minor Changes
