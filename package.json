@@ -5,21 +5,17 @@
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"scripts": {
 		"build": "tsup index.ts --format cjs,esm --dts",
+		"build:prod": "tsup index.ts --format cjs,esm --dts --minify",
 		"lint": "tsc",
 		"test": "vitest",
 		"test:coverage": "vitest run --coverage && open coverage/index.html",
 		"sandbox:vite:dev": "vite sandbox/vite-react --c sandbox/vite-react/vite.config.ts",
 		"sandbox:vite:build": "vite build sandbox/vite-react --c sandbox/vite-react/vite.config.ts",
 		"sandbox:vite:start": "vite preview sandbox/vite-react --port 8080 --c sandbox/vite-react/vite.config.ts",
-		"docs:dev": "next docs",
-		"docs:build": "next build docs",
-		"docs:start": "next start docs",
-		"release": "pnpm run build && changeset publish"
+		"release": "pnpm run build:prod && changeset publish"
 	},
 	"keywords": [
 		"react",
