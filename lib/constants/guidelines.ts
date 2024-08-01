@@ -19,7 +19,6 @@ const UNIT_SIZE = {
 	MOBILE_LEADERBOARD: [320, 50],
 	LINE_TEXT_UNIT: [280, 18],
 	ONE_BY_ONE: [1, 1],
-	BLANK: [0, 0],
 	FLUID: "fluid",
 } as const;
 

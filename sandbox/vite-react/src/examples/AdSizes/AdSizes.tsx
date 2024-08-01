@@ -42,7 +42,12 @@ const Component = () => {
 				<GPTSlot
 					adUnit="Travel/Europe"
 					slotId="multi-size-ad"
-					sizes={[UNIT_SIZE.MPU_300, UNIT_SIZE.LEADERBOARD, [750, 200]]}
+					sizes={[
+						UNIT_SIZE.MPU_300,
+						UNIT_SIZE.LEADERBOARD,
+						[750, 200],
+						UNIT_SIZE.FLUID,
+					]}
 				/>
 			</div>
 			<h1>Fluid ad slot</h1>
@@ -101,7 +106,7 @@ const Component = () => {
 						},
 						{
 							viewport: [0, 0],
-							sizes: UNIT_SIZE.BLANK,
+							sizes: [],
 						},
 					]}
 				/>

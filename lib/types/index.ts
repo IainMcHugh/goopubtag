@@ -105,8 +105,8 @@ export type OutOfPage = Pick<SlotUnit, "adUnit" | "targetingArguments"> &
 	OutOfPageTypes;
 
 export type Mapping = {
-	addSize: (viewport: Size, sizes: Sizes) => void;
-	build: () => void;
+	addSize: (viewport: Size, sizes: Sizes) => Mapping;
+	build: () => Mapping;
 };
 
 /**

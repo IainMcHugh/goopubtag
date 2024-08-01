@@ -38,11 +38,11 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 				}
 				if (unit !== null) {
 					if (sizeMapping) {
-						const mapping = gtag.getMapping();
+						const mappingBuilder = gtag.getMapping();
 						for (const { viewport, sizes } of sizeMapping) {
-							mapping.addSize(viewport, sizes);
+							mappingBuilder.addSize(viewport, sizes);
 						}
-						mapping.build();
+						const mapping = mappingBuilder.build();
 						unit.defineSizeMapping(mapping);
 					}
 
