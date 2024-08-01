@@ -1,5 +1,11 @@
 # goopubtag
 
+## 0.2.1
+
+### Patch Changes
+
+- d5df73a: This fixes a bug where the size mapping for responsive ads was not being defined properly
+
 ## 0.2.0
 
 ### Minor Changes
