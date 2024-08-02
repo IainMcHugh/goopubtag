@@ -20,7 +20,8 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 		fallback = "default",
 		outOfPage = false,
 	} = props;
-	const { networkId, units, isLoaded, lazyLoad, addUnit } = useGPTContext();
+	const { networkId, units, isLoaded, lazyLoad, singleRequest, addUnit } =
+		useGPTContext();
 	const adUnitPath = gtag.getAdUnitPath(networkId, adUnit);
 
 	useEffect(() => {
@@ -99,6 +100,9 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 						}
 					}
 					slotId && addUnit({ slotId, unit });
+					if (singleRequest) {
+						gtag.enableSingleRequest();
+					}
 					gtag.enableService(slotId);
 				}
 			});
@@ -124,6 +128,7 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 		sizes,
 		units,
 		lazyLoad,
+		singleRequest,
 		addUnit,
 		onSlotLoad,
 		onSlotRequested,
