@@ -23,7 +23,6 @@ const useGPTProvider = <PageAttributes extends Attributes>(
 		fallback = "default",
 		targetingArguments,
 		outOfPage,
-		singleRequest,
 	} = props;
 
 	const addUnit = (unit: Unit) => setUnits((prev) => [...prev, unit]);
@@ -85,20 +84,9 @@ const useGPTProvider = <PageAttributes extends Attributes>(
 				});
 
 				gtag.handleFallback(fallback);
-
-				if (singleRequest) {
-					gtag.enableSingleRequest();
-				}
 			});
 		}
-	}, [
-		isLoaded,
-		fallback,
-		outOfPage,
-		targetingArguments,
-		networkId,
-		singleRequest,
-	]);
+	}, [isLoaded, fallback, outOfPage, targetingArguments, networkId]);
 
 	return {
 		isLoaded,
