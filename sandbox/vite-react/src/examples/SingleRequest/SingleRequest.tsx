@@ -1,7 +1,7 @@
 import React from "react";
 import { GPTProvider, GPTSlot } from "../../../../../dist";
 
-const DisplayTestAd = () => {
+const SingleRequest = () => {
 	return (
 		<GPTProvider networkId={6355419} singleRequest debug>
 			<Component />
@@ -28,4 +28,4 @@ const Component = () => {
 	);
 };
 
-export { DisplayTestAd };
+export { SingleRequest };

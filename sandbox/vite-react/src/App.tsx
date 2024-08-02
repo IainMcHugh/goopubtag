@@ -1,67 +1,59 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import { config } from "./Config";
+
 function App() {
 	return (
 		<div>
-			<h1>Welcome to GPT React </h1>
-			<h2>
-				The following examples correspond to Google Publisher Tag examples
-				listed
-			</h2>
-			<a href="https://github.com/googleads/google-publisher-tag-samples">
-				here
-			</a>
-			<div>
-				<Link to={"/examples/display-test-ad"} reloadDocument>
-					Display test ad
-				</Link>
-				<br />
-				<Link to={"/examples/key-value-targeting"} reloadDocument>
-					Key value targeting
-				</Link>
-				<br />
-				<Link to={"/examples/refresh"} reloadDocument>
-					Refresh
-				</Link>
-				<br />
-				<Link to={"/examples/ad-sizes"} reloadDocument>
-					Ad sizes
-				</Link>
-				<br />
-				<Link to={"/examples/display-limited-ad"} reloadDocument>
-					Display limited ad
-				</Link>
-				<br />
-				<Link to={"/examples/configure-privacy"} reloadDocument>
-					Configure privacy
-				</Link>
-				<br />
-				<Link to={"/examples/ad-event-listeners"} reloadDocument>
-					Ad event Listeners
-				</Link>
-				<br />
-				<Link to={"/examples/collapse-empty-ad-slots"} reloadDocument>
-					Collapse empty ad slots
-				</Link>
-				<br />
-				<Link to={"/examples/display-out-of-page-ad"} reloadDocument>
-					Display out of page ad
-				</Link>
-				<br />
-				<Link to={"/examples/display-anchor-ad"} reloadDocument>
-					Display anchor ad
-				</Link>
-				<br />
-				<Link to={"/examples/display-rewarded-ad"} reloadDocument>
-					Display rewarded ad
-				</Link>
-				<br />
-				<Link to={"/examples/lazy-load"} reloadDocument>
-					Lazy load
-				</Link>
-				<br />
+			<h1>Welcome to Goopubtag </h1>
+			<div
+				style={{
+					display: "inline-flex",
+					alignItems: "center",
+					fontSize: "24px",
+				}}
+			>
+				<h2 style={{ marginRight: "8px", fontSize: "24px", fontWeight: 200 }}>
+					The following examples correspond to Google Publisher Tag examples
+					listed
+				</h2>
+				<a
+					href="https://github.com/googleads/google-publisher-tag-samples"
+					style={{
+						fontSize: "24px",
+						textDecoration: "none",
+						fontWeight: 200,
+						color: "darkcyan",
+					}}
+				>
+					here
+				</a>
 			</div>
+			<ul style={{ paddingInlineStart: "0" }}>
+				{config.map((x) => (
+					<li
+						key={x.name}
+						style={{
+							listStyle: "none",
+							padding: "4px",
+						}}
+					>
+						<Link
+							to={x.path}
+							reloadDocument
+							style={{
+								fontSize: "20px",
+								textDecoration: "none",
+								fontWeight: 200,
+								color: "darkcyan",
+							}}
+						>
+							{x.name}
+						</Link>
+					</li>
+				))}
+			</ul>
 		</div>
 	);
 }
