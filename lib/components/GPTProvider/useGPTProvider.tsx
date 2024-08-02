@@ -23,7 +23,7 @@ const useGPTProvider = <PageAttributes extends Attributes>(
 		fallback = "default",
 		targetingArguments,
 		outOfPage,
-		lazyLoad,
+		singleRequest,
 	} = props;
 
 	const addUnit = (unit: Unit) => setUnits((prev) => [...prev, unit]);
@@ -61,6 +61,7 @@ const useGPTProvider = <PageAttributes extends Attributes>(
 						gtag.handleRewarded(outOfPage);
 					}
 				}
+
 				if (targetingArguments) {
 					for (const targetingKey of Object.keys(targetingArguments)) {
 						gtag.setTargeting(targetingKey, targetingArguments[targetingKey]);
@@ -84,10 +85,20 @@ const useGPTProvider = <PageAttributes extends Attributes>(
 				});
 
 				gtag.handleFallback(fallback);
-				// gtag.enableSingleRequest();
+
+				if (singleRequest) {
+					gtag.enableSingleRequest();
+				}
 			});
 		}
-	}, [isLoaded, fallback, outOfPage, targetingArguments, networkId]);
+	}, [
+		isLoaded,
+		fallback,
+		outOfPage,
+		targetingArguments,
+		networkId,
+		singleRequest,
+	]);
 
 	return {
 		isLoaded,
