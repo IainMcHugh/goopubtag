@@ -1,5 +1,11 @@
 # goopubtag
 
+## 0.2.2
+
+### Patch Changes
+
+- 6bc0420: Enable single request
+
 ## 0.2.1
 
 ### Patch Changes
