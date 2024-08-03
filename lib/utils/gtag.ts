@@ -16,6 +16,11 @@ import type {
 	SlotViewableEvent,
 } from "../types";
 
+const init = (): void => {
+	window.googletag = window.googletag || ({} as unknown as GoogleTag);
+	window.googletag.cmd = window.googletag.cmd || [];
+};
+
 const push = (fn: () => void): void => {
 	window.googletag?.cmd.push(fn);
 };
@@ -189,6 +194,7 @@ const enableLazyLoad = (lazyLoad: boolean | LazyLoad): void => {
 };
 
 export const gtag = {
+	init,
 	push,
 	getAdUnitPath,
 	getTopAnchor,
