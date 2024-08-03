@@ -1,5 +1,11 @@
 # goopubtag
 
+## 0.2.3
+
+### Patch Changes
+
+- 941b237: Remove isLoading state, init googletag and cmd as recommended
+
 ## 0.2.2
 
 ### Patch Changes
