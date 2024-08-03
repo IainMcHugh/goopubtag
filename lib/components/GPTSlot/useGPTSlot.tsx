@@ -20,93 +20,92 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 		fallback = "default",
 		outOfPage = false,
 	} = props;
-	const { networkId, units, isLoaded, lazyLoad, singleRequest, addUnit } =
+	const { networkId, units, lazyLoad, singleRequest, addUnit } =
 		useGPTContext();
 	const adUnitPath = gtag.getAdUnitPath(networkId, adUnit);
 
 	useEffect(() => {
-		if (isLoaded) {
-			gtag.push(() => {
-				let unit: Slot | null = null;
-				const isAlreadyDefined = units.find((u) => u.slotId === slotId);
+		gtag.init();
+		gtag.push(() => {
+			let unit: Slot | null = null;
+			const isAlreadyDefined = units.find((u) => u.slotId === slotId);
 
-				if (isAlreadyDefined) return;
+			if (isAlreadyDefined) return;
 
-				if (outOfPage) {
-					unit = gtag.createOutOfPageSlot(adUnitPath, slotId);
-				} else {
-					unit = gtag.createSlot(adUnitPath, sizes, slotId);
+			if (outOfPage) {
+				unit = gtag.createOutOfPageSlot(adUnitPath, slotId);
+			} else {
+				unit = gtag.createSlot(adUnitPath, sizes, slotId);
+			}
+			if (unit !== null) {
+				if (sizeMapping) {
+					const mappingBuilder = gtag.getMapping();
+					for (const { viewport, sizes } of sizeMapping) {
+						mappingBuilder.addSize(viewport, sizes);
+					}
+					const mapping = mappingBuilder.build();
+					unit.defineSizeMapping(mapping);
 				}
-				if (unit !== null) {
-					if (sizeMapping) {
-						const mappingBuilder = gtag.getMapping();
-						for (const { viewport, sizes } of sizeMapping) {
-							mappingBuilder.addSize(viewport, sizes);
-						}
-						const mapping = mappingBuilder.build();
-						unit.defineSizeMapping(mapping);
-					}
 
-					if (targetingArguments) {
-						for (const targetingKey of Object.keys(targetingArguments)) {
-							unit.setTargeting(targetingKey, targetingArguments[targetingKey]);
-						}
+				if (targetingArguments) {
+					for (const targetingKey of Object.keys(targetingArguments)) {
+						unit.setTargeting(targetingKey, targetingArguments[targetingKey]);
 					}
-					if (lazyLoad !== undefined) {
-						gtag.enableLazyLoad(lazyLoad);
-					}
-
-					if (onSlotLoad) {
-						subscribe("slot_load", (event) => {
-							const id = event.slot.getSlotElementId();
-							if (id === slotId) onSlotLoad(event);
-						});
-					}
-					if (onSlotRequested) {
-						subscribe("slot_requested", (event) => {
-							const id = event.slot.getSlotElementId();
-							if (id === slotId) onSlotRequested(event);
-						});
-					}
-					if (onSlotIsViewable) {
-						subscribe("impression_viewable", (event) => {
-							const id = event.slot.getSlotElementId();
-							if (id === slotId) onSlotIsViewable(event);
-						});
-					}
-					if (onSlotRenderEnded) {
-						subscribe("slot_render_ended", (event) => {
-							const id = event.slot.getSlotElementId();
-							if (id === slotId) onSlotRenderEnded(event);
-						});
-					}
-
-					if (fallback && fallback !== "default") {
-						switch (fallback) {
-							case "expand": {
-								unit.setCollapseEmptyDiv(true, true);
-								break;
-							}
-							case "expand_strict": {
-								unit.setCollapseEmptyDiv(false);
-								break;
-							}
-							case "collapse": {
-								unit.setCollapseEmptyDiv(true);
-								break;
-							}
-							default:
-								break;
-						}
-					}
-					slotId && addUnit({ slotId, unit });
-					if (singleRequest) {
-						gtag.enableSingleRequest();
-					}
-					gtag.enableService(slotId);
 				}
-			});
-		}
+				if (lazyLoad !== undefined) {
+					gtag.enableLazyLoad(lazyLoad);
+				}
+
+				if (onSlotLoad) {
+					subscribe("slot_load", (event) => {
+						const id = event.slot.getSlotElementId();
+						if (id === slotId) onSlotLoad(event);
+					});
+				}
+				if (onSlotRequested) {
+					subscribe("slot_requested", (event) => {
+						const id = event.slot.getSlotElementId();
+						if (id === slotId) onSlotRequested(event);
+					});
+				}
+				if (onSlotIsViewable) {
+					subscribe("impression_viewable", (event) => {
+						const id = event.slot.getSlotElementId();
+						if (id === slotId) onSlotIsViewable(event);
+					});
+				}
+				if (onSlotRenderEnded) {
+					subscribe("slot_render_ended", (event) => {
+						const id = event.slot.getSlotElementId();
+						if (id === slotId) onSlotRenderEnded(event);
+					});
+				}
+
+				if (fallback && fallback !== "default") {
+					switch (fallback) {
+						case "expand": {
+							unit.setCollapseEmptyDiv(true, true);
+							break;
+						}
+						case "expand_strict": {
+							unit.setCollapseEmptyDiv(false);
+							break;
+						}
+						case "collapse": {
+							unit.setCollapseEmptyDiv(true);
+							break;
+						}
+						default:
+							break;
+					}
+				}
+				slotId && addUnit({ slotId, unit });
+				if (singleRequest) {
+					gtag.enableSingleRequest();
+				}
+				gtag.enableService(slotId);
+			}
+		});
 
 		return () => {
 			/** Cleanup */
@@ -118,7 +117,6 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 				unsubscribe("slot_render_ended", onSlotRenderEnded);
 		};
 	}, [
-		isLoaded,
 		outOfPage,
 		targetingArguments,
 		sizeMapping,
