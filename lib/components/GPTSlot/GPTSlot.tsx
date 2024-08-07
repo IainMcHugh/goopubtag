@@ -12,9 +12,16 @@ const GPTSlot = memo(
 	<A extends UnitTargeting = UnitTargeting>(
 		props: GPTSlotProps<A>,
 	): JSX.Element => {
-		const { slotId, className } = props;
+		const { slotId, className, dataTestId } = props;
 		const { style } = useGPTSlot(props);
-		return <div id={slotId} style={style} className={className} />;
+		return (
+			<div
+				id={slotId}
+				style={style}
+				className={className}
+				data-testid={dataTestId}
+			/>
+		);
 	},
 );
 
