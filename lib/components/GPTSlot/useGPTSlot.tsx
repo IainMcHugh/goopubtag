@@ -28,7 +28,7 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 		gtag.init();
 		gtag.push(() => {
 			let unit: Slot | null = null;
-			const isAlreadyDefined = units.find((u) => u.slotId === slotId);
+			const isAlreadyDefined = units?.find((u) => u.slotId === slotId);
 
 			if (isAlreadyDefined) return;
 
