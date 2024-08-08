@@ -8,14 +8,54 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
           version: 8
-      - uses: actions/setup-node@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: "pnpm"
 
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run lint && pnpm run build:prod
+      - name: Package installation
+        run: pnpm install --frozen-lockfile
+
+      - name: Linting
+        run: pnpm run lint
+        
+      - name: Testing and coverage
+        run: pnpm test:coverage
+      
+      - name: Extract lines coverage percentage
+        id: extract_coverage
+        run: |
+          # Extract the lines coverage percentage using jq
+          lines_pct=$(jq '.total.lines.pct' tests/coverage/coverage-summary.json)
+          echo "Coverage percentage: $lines_pct"
+          # Save it to the output
+          echo "::set-output name=lines_pct::$lines_pct"
+      
+      - name: Set coverage percentage as env var
+        run: echo "LINES_PCT=${{ steps.extract_coverage.outputs.lines_pct }}" >> $GITHUB_ENV
+
+      - name: Build production
+        run: pnpm run build:prod
+        
+      - name: Coverage badge
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GOOPUBTAG_COVERAGE_BADGE }}
+          gistID: 6098142efd5a281865b461a4c89acd8e
+          filename: gpt_coverage_badge.json
+          label: test coverage
+          message: ${{ env.LINES_PCT }}%
+          color: "#6E9F18" # vitest green
+          namedLogo: vitest
+        
+      
+          

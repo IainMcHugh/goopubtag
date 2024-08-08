@@ -22,6 +22,7 @@ const GPTDev = () => {
 				backgroundColor: "#66339933",
 				zIndex: "9999",
 			}}
+			data-testid="gpt-dev-icon"
 		>
 			<button
 				type="button"
