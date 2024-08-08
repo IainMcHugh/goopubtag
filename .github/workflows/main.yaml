@@ -39,6 +39,7 @@ jobs:
           echo "Coverage percentage: $lines_pct"
           # Save it to the output
           echo "::set-output name=lines_pct::$lines_pct"
+          echo "{lines_pct}={$lines_pct}" >> $GITHUB_OUTPUT
       
       - name: Set coverage percentage as env var
         run: echo "LINES_PCT=${{ steps.extract_coverage.outputs.lines_pct }}" >> $GITHUB_ENV
@@ -53,8 +54,8 @@ jobs:
           gistID: 6098142efd5a281865b461a4c89acd8e
           filename: gpt_coverage_badge.json
           label: test coverage
-          message: ${{ env.LINES_PCT }}
-          color: green
+          message: ${{ env.LINES_PCT }}%
+          color: "#6E9F18" # vitest green
           namedLogo: vitest
         
       
