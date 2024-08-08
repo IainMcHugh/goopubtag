@@ -38,7 +38,7 @@ jobs:
           lines_pct=$(jq '.total.lines.pct' tests/coverage/coverage-summary.json)
           echo "Coverage percentage: $lines_pct"
           # Save it to the output
-          echo "{lines_pct}={$lines_pct}" >> $GITHUB_OUTPUT
+          echo "::set-output name=lines_pct::$lines_pct"
       
       - name: Set coverage percentage as env var
         run: echo "LINES_PCT=${{ steps.extract_coverage.outputs.lines_pct }}" >> $GITHUB_ENV
