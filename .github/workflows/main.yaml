@@ -28,8 +28,20 @@ jobs:
       - name: Linting
         run: pnpm run lint
         
-      - name: Testing
-        run: pnpm test
+      - name: Testing and coverage
+        run: pnpm test:coverage
+      
+      - name: Extract lines coverage percentage
+        id: extract_coverage
+        run: |
+          # Extract the lines coverage percentage using jq
+          lines_pct=$(jq '.total.lines.pct' tests/coverage/coverage-summary.json)
+          echo "Coverage percentage: $lines_pct"
+          # Save it to the output
+          echo "::set-output name=lines_pct::$lines_pct"
+      
+      - name: Set coverage percentage as env var
+        run: echo "LINES_PCT=${{ steps.extract_coverage.outputs.lines_pct }}" >> $GITHUB_ENV
 
       - name: Build production
         run: pnpm run build:prod
@@ -40,9 +52,10 @@ jobs:
           auth: ${{ secrets.GOOPUBTAG_COVERAGE_BADGE }}
           gistID: 6098142efd5a281865b461a4c89acd8e
           filename: gpt_coverage_badge.json
-          label: Hello
-          message: World
-          color: orange
+          label: test coverage
+          message: ${{ env.LINES_PCT }}
+          color: green
+          namedLogo: vitest
         
       
           

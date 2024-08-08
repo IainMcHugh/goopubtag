@@ -5,15 +5,14 @@
 	"main": "dist/index.js",
 	"module": "dist/index.mjs",
 	"types": "dist/index.d.ts",
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"scripts": {
 		"build": "tsup index.ts --format cjs,esm --dts",
 		"build:prod": "tsup index.ts --format cjs,esm --dts --minify",
 		"lint": "tsc",
 		"test": "vitest",
-		"test:coverage": "vitest run --coverage && open test/coverage/index.html",
+		"test:coverage": "vitest run --coverage",
+		"test:coverage:open": "vitest run --coverage && open tests/coverage/index.html",
 		"sandbox:vite:dev": "vite sandbox/vite-react --c sandbox/vite-react/vite.config.ts",
 		"sandbox:vite:build": "vite build sandbox/vite-react --c sandbox/vite-react/vite.config.ts",
 		"sandbox:vite:start": "vite preview sandbox/vite-react --port 8080 --c sandbox/vite-react/vite.config.ts",

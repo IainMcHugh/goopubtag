@@ -18,8 +18,8 @@ export default defineConfig({
 				"**/*.{type,test}.{ts,tsx}",
 				"lib/index.ts",
 			],
-			reporter: ["html"],
-			reportsDirectory: "./test/coverage",
+			reporter: ["html", "json-summary"],
+			reportsDirectory: "./tests/coverage",
 		},
 	},
 });
