@@ -34,5 +34,15 @@ jobs:
       - name: Build production
         run: pnpm run build:prod
         
+      - name: Coverage badge
+        uses: schneegans/dynamic-badges-action@v1.7.0
+        with:
+          auth: ${{ secrets.GOOPUBTAG_COVERAGE_BADGE }}
+          gistID: 6098142efd5a281865b461a4c89acd8e
+          filename: gpt_coverage_badge.json
+          label: Hello
+          message: World
+          color: orange
+        
       
           
