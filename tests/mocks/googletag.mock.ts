@@ -23,9 +23,12 @@ export const mockGoogleTag: GoogleTag = {
 	encryptedSignalProviders: null,
 	enums: {
 		OutOfPageFormat: {
-			TOP_ANCHOR: "top-anchor",
-			BOTTOM_ANCHOR: "bottom-anchor",
-			REWARDED: "rewarded",
+			TOP_ANCHOR: 0,
+			BOTTOM_ANCHOR: 1,
+			REWARDED: 2,
+			LEFT_SIDE_RAIL: 3,
+			RIGHT_SIDE_RAIL: 4,
+			INTERSTITIAL: 5,
 		},
 	},
 	evalScripts: vi.fn(),
@@ -36,6 +39,7 @@ export const mockGoogleTag: GoogleTag = {
 	openConsole: vi.fn(),
 	pubads: vi.fn().mockReturnValue({
 		addEventListener: vi.fn(),
+		removeEventListener: vi.fn(),
 		collapseEmptyDivs: vi.fn(),
 		setTargeting: vi.fn(),
 		clearTargeting: vi.fn(),

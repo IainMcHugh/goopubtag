@@ -10,3 +10,30 @@ Goopubtag is a modern solution for [Google Publisher tag](https://developers.goo
 - Support for most recent GPT implementations 🚀
 
 To get started, head over to the [documentation site](https://www.goopubtag.com).
+
+## Installation
+
+At the route of your application, in your terminal run:
+
+```bash
+npm install goopubtag # or yarn, pnpm
+```
+
+## Usage
+
+After installation is complete, you can start using goopubtag in your application:
+
+```tsx
+import { GPTProvider, GPTSlot } from 'goopubtag';
+ 
+const Component = () => {
+  return (
+    <div>
+      <GPTProvider networkId={123456}>
+        {/** .. */}
+        <GPTSlot slotId="your-slot-id">
+      </GPTProvider>
+    </div>
+  );
+}
+```

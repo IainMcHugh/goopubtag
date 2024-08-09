@@ -8,6 +8,9 @@ import type {
 	Mapping,
 	OutOfPage,
 	PrivacySettings,
+	RewardedOnCloseEvent,
+	RewardedOnGrantedEvent,
+	RewardedOnReadyEvent,
 	Sizes,
 	Slot,
 	SlotLoadEvent,
@@ -33,28 +36,49 @@ const expand = (): void => {
 	window.googletag?.pubads().collapseEmptyDivs(true);
 };
 
-const getTopAnchor = (): string | null => {
+const getTopAnchor = (): number | null => {
 	return window.googletag?.enums.OutOfPageFormat.TOP_ANCHOR || null;
 };
 
-const getBottomAnchor = (): string | null => {
+const getBottomAnchor = (): number | null => {
 	return window.googletag?.enums.OutOfPageFormat.BOTTOM_ANCHOR || null;
 };
 
-const getRewarded = (): string | null => {
+const getLeftSideRail = (): number | null => {
+	return window.googletag?.enums.OutOfPageFormat.LEFT_SIDE_RAIL || null;
+};
+
+const getRightSideRail = (): number | null => {
+	return window.googletag?.enums.OutOfPageFormat.RIGHT_SIDE_RAIL || null;
+};
+
+const getRewarded = (): number | null => {
 	return window.googletag?.enums.OutOfPageFormat.REWARDED || null;
 };
 
-const getOutOfPageSlotId = (outOfPage: OutOfPage): string | null => {
+const getOutOfPageSlotId = (outOfPage: OutOfPage): number | null => {
 	switch (outOfPage.type) {
 		case "anchor": {
 			if (outOfPage.settings.position === "top") {
-				return window.googletag?.enums.OutOfPageFormat.TOP_ANCHOR || null;
+				return getTopAnchor();
 			}
-			return window.googletag?.enums.OutOfPageFormat.BOTTOM_ANCHOR || null;
+			if (outOfPage.settings.position === "bottom") {
+				return getBottomAnchor();
+			}
+			return null;
 		}
 		case "rewarded": {
-			return window.googletag?.enums.OutOfPageFormat.REWARDED || null;
+			return getRewarded();
+		}
+
+		case "rail": {
+			if (outOfPage.settings.position === "left") {
+				return getLeftSideRail();
+			}
+			if (outOfPage.settings.position === "right") {
+				return getRightSideRail();
+			}
+			return null;
 		}
 
 		default: {
@@ -65,29 +89,9 @@ const getOutOfPageSlotId = (outOfPage: OutOfPage): string | null => {
 
 const createOutOfPageSlot = (
 	adUnitPath: string,
-	slotId: string | null,
+	variant: number | null,
 ): Slot | null => {
-	return (
-		window.googletag
-			?.defineOutOfPageSlot(adUnitPath, slotId)
-			?.addService(window?.googletag?.pubads()) || null
-	);
-};
-
-const handleRewarded = (outOfPage: OutOfPage): void => {
-	if (outOfPage.type === "rewarded") {
-		window.googletag
-			?.pubads()
-			.addEventListener("rewardedSlotReady", outOfPage.settings.onReady);
-
-		window.googletag
-			?.pubads()
-			.addEventListener("rewardedSlotClosed", outOfPage.settings.onClosed);
-
-		window.googletag
-			?.pubads()
-			.addEventListener("rewardedSlotGranted", outOfPage.settings.onGranted);
-	}
+	return window.googletag?.defineOutOfPageSlot(adUnitPath, variant) || null;
 };
 
 const handleFallback = (fallback: Collapse): void => {
@@ -150,6 +154,52 @@ const createSlot = (
 
 const getMapping = (): Mapping => window.googletag?.sizeMapping();
 
+const handleRewardedSlotReady = (
+	onSlotReady: (event: RewardedOnReadyEvent) => void,
+): void => {
+	window.googletag?.pubads().addEventListener("rewardedSlotReady", onSlotReady);
+};
+
+const handleRewardedSlotClosed = (
+	onSlotClosed: (event: RewardedOnCloseEvent) => void,
+): void => {
+	window.googletag
+		?.pubads()
+		.addEventListener("rewardedSlotClosed", onSlotClosed);
+};
+
+const handleRewardedSlotGranted = (
+	onSlotGranted: (event: RewardedOnGrantedEvent) => void,
+): void => {
+	window.googletag
+		?.pubads()
+		.addEventListener("rewardedSlotGranted", onSlotGranted);
+};
+
+const removeRewardedSlotReady = (
+	onSlotReady: (event: RewardedOnReadyEvent) => void,
+): void => {
+	window.googletag
+		?.pubads()
+		.removeEventListener("rewardedSlotReady", onSlotReady);
+};
+
+const removeRewardedSlotClosed = (
+	onSlotClosed: (event: RewardedOnCloseEvent) => void,
+): void => {
+	window.googletag
+		?.pubads()
+		.removeEventListener("rewardedSlotClosed", onSlotClosed);
+};
+
+const removeRewardedSlotGranted = (
+	onSlotGranted: (event: RewardedOnGrantedEvent) => void,
+): void => {
+	window.googletag
+		?.pubads()
+		.removeEventListener("rewardedSlotGranted", onSlotGranted);
+};
+
 const handleSlotLoad = (onSlotLoad: (event: SlotLoadEvent) => void): void => {
 	window.googletag?.pubads().addEventListener("slotOnload", onSlotLoad);
 };
@@ -176,9 +226,46 @@ const handleSlotRenderEnded = (
 		.addEventListener("slotRenderEnded", onSlotRenderEnded);
 };
 
-const enableService = (slotId: string): void => {
+const removeSlotLoad = (onSlotLoad: (event: SlotLoadEvent) => void): void => {
+	window.googletag?.pubads().removeEventListener("slotOnload", onSlotLoad);
+};
+
+const removeSlotRequested = (
+	onSlotRequested: (event: SlotRequestEvent) => void,
+): void => {
+	window.googletag
+		?.pubads()
+		.removeEventListener("slotRequested", onSlotRequested);
+};
+
+const removeSlotIsViewable = (
+	onSlotIsViewable: (event: SlotViewableEvent) => void,
+): void => {
+	window.googletag
+		?.pubads()
+		.removeEventListener("impressionViewable", onSlotIsViewable);
+};
+
+const removeSlotRenderEnded = (
+	onSlotRenderEnded: (event: SlotRenderEndedEvent) => void,
+): void => {
+	window.googletag
+		?.pubads()
+		.removeEventListener("slotRenderEnded", onSlotRenderEnded);
+};
+
+const enableServices = (): void => {
 	window.googletag?.enableServices();
+};
+
+const enableService = (slotId: string): void => {
+	enableServices();
 	window?.googletag?.display(slotId);
+};
+
+const enableOutOfPageService = (slot: Slot): void => {
+	enableServices();
+	window?.googletag?.display(slot);
 };
 
 const enableSingleRequest = () => {
@@ -199,23 +286,35 @@ export const gtag = {
 	getAdUnitPath,
 	getTopAnchor,
 	getBottomAnchor,
+	getLeftSideRail,
+	getRightSideRail,
 	getRewarded,
 	getOutOfPageSlotId,
 	getMapping,
 	createSlot,
 	createOutOfPageSlot,
-	handleRewarded,
 	handleFallback,
+	handleRewardedSlotReady,
+	handleRewardedSlotClosed,
+	handleRewardedSlotGranted,
+	removeRewardedSlotReady,
+	removeRewardedSlotClosed,
+	removeRewardedSlotGranted,
 	handleSlotLoad,
 	handleSlotRequested,
 	handleSlotIsViewable,
 	handleSlotRenderEnded,
+	removeSlotLoad,
+	removeSlotRequested,
+	removeSlotIsViewable,
+	removeSlotRenderEnded,
 	setTargeting,
 	setPrivacySettings,
 	clearTargeting,
 	refresh,
 	addService,
 	enableService,
+	enableOutOfPageService,
 	enableSingleRequest,
 	enableLazyLoad,
 };

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { GPTProvider, GPTSlot } from "../../../../../dist";
 import type { SlotLoadEvent, SlotRequestEvent } from "../../../../../dist";
+import type { Styles } from "../../Config";
 
 const LazyLoad = () => {
 	return (
 		<GPTProvider
 			networkId={6355419}
-			debug={true}
 			lazyLoad={{
 				// Fetch slots within 5 viewports.
 				fetchMarginPercent: 500,
@@ -16,6 +16,8 @@ const LazyLoad = () => {
 				// and users tend to scroll faster.
 				mobileScaling: 2.0,
 			}}
+			singleRequest
+			debug
 		>
 			<Component />
 		</GPTProvider>
@@ -60,7 +62,7 @@ const Component = () => {
 
 	const yesOrNo = (v: boolean) => (v ? "Yes" : "No");
 	return (
-		<div style={{ width: "100%", overflow: "hidden", marginTop: "125px" }}>
+		<div style={styles.base}>
 			<p>Lazy load</p>
 			<GPTSlot
 				slotId="div-1"
@@ -70,7 +72,7 @@ const Component = () => {
 				onSlotLoad={onFirstLoad}
 				onSlotRequested={onFirstRequested}
 			/>
-			<div style={{ height: "300vh", display: "block" }} />
+			<div style={styles.gap_sm} />
 			<GPTSlot
 				slotId="div-2"
 				adUnit="Travel"
@@ -79,7 +81,7 @@ const Component = () => {
 				onSlotLoad={onSecondLoad}
 				onSlotRequested={onSecondRequested}
 			/>
-			<div style={{ height: "900vh" }} />
+			<div style={styles.gap_lg} />
 			<GPTSlot
 				slotId="div-3"
 				adUnit="Travel"
@@ -88,7 +90,7 @@ const Component = () => {
 				onSlotLoad={onThirdLoad}
 				onSlotRequested={onThirdRequested}
 			/>
-			<div style={{ position: "fixed", top: 0, left: 0 }}>
+			<div style={styles.fixed}>
 				<table>
 					<tbody>
 						<tr>
@@ -118,5 +120,12 @@ const Component = () => {
 		</div>
 	);
 };
+
+const styles = {
+	base: { width: "100%", overflow: "hidden", marginTop: "125px" },
+	gap_sm: { height: "300vh", display: "block" },
+	gap_lg: { height: "900vh" },
+	fixed: { position: "fixed", top: 0, left: 0 },
+} satisfies Styles;
 
 export { LazyLoad };

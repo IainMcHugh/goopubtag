@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type CSSProperties } from "react";
 
 import App from "./App";
 import { AdEventListeners } from "./examples/AdEventListeners/AdEventListeners";
@@ -7,7 +7,7 @@ import { CollapseEmptyAdSlots } from "./examples/CollapseEmptyAdSlots/CollapseEm
 import { ConfigurePrivacy } from "./examples/ConfigurePrivacy/ConfigurePrivacy";
 import { DisplayAnchorAd } from "./examples/DisplayAnchorAd/DisplayAnchorAd";
 import { DisplayLimitedAd } from "./examples/DisplayLimitedAd/DisplayLimitedAd";
-import { DisplayOutOfPageAd } from "./examples/DisplayOutOfPageAd/DisplayOutOfPageAd";
+import { DisplayRailAd } from "./examples/DisplayRailAd/DisplayRailAd";
 import { DisplayRewardedAd } from "./examples/DisplayRewardedAd/DisplayRewardedAd";
 import { DisplayTestAd } from "./examples/DisplayTestAd/DisplayTestAd";
 import { KeyValueTargeting } from "./examples/KeyValueTargeting/KeyValueTargeting";
@@ -62,9 +62,9 @@ export const config = [
 		element: <CollapseEmptyAdSlots />,
 	},
 	{
-		name: "Display out of page ad",
-		path: "/examples/display-out-of-page-ad",
-		element: <DisplayOutOfPageAd />,
+		name: "Display side rail ad",
+		path: "/examples/display-side-rail-ad",
+		element: <DisplayRailAd />,
 	},
 	{
 		name: "Display anchor ad",
@@ -87,3 +87,5 @@ export const config = [
 		element: <SingleRequest />,
 	},
 ];
+
+export type Styles = Record<string, CSSProperties>;

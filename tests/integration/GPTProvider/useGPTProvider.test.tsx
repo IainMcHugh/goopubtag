@@ -36,6 +36,11 @@ vi.mock("lib/utils/gtag", () => ({
 		handleFallback: vi.fn(),
 		addService: vi.fn(),
 		handleRewarded: vi.fn(),
+		enableOutOfPageService: vi.fn(),
+		removeSlotLoad: vi.fn(),
+		removeSlotRequested: vi.fn(),
+		removeSlotIsViewable: vi.fn(),
+		removeSlotRenderEnded: vi.fn(),
 	},
 }));
 
@@ -72,13 +77,9 @@ describe("Hooks | Use GPT Provider", () => {
 	it("should handle outOfPage slot", () => {
 		const outOfPage: OutOfPage = {
 			type: "anchor",
-			settings: {
-				position: "top",
-				adUnit: "testAdUnit",
-				targetingArguments: {
-					key1: "value1",
-				},
-			},
+			adUnit: "testAdUnit",
+			targetingArguments: { key1: "value1" },
+			settings: { position: "top" },
 		};
 
 		renderHook(() =>
@@ -95,7 +96,6 @@ describe("Hooks | Use GPT Provider", () => {
 
 		expect(mockSetTargeting).toHaveBeenCalledWith("key1", "value1");
 		expect(gtag.addService).toHaveBeenCalled();
-		expect(gtag.handleRewarded).toHaveBeenCalledWith(outOfPage);
 	});
 
 	it("should handle slot events", () => {
