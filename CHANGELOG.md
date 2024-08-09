@@ -1,5 +1,19 @@
 # goopubtag
 
+## 0.3.0
+
+### Minor Changes
+
+- 3b9657f: Fixed out of page implementation, breaking changes:
+
+  - `outOfPage` prop no longer exists on `GPTSlot`
+  - `outOfPage` prop on `GPTProvider` has changed
+
+  - updated readme
+  - updated tests
+  - added examples for side rail ads
+  - fixed console error "div element is already associated with another slot"
+
 ## 0.2.3
 
 ### Patch Changes
