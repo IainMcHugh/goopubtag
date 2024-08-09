@@ -200,10 +200,6 @@ const removeRewardedSlotGranted = (
 		.removeEventListener("rewardedSlotGranted", onSlotGranted);
 };
 
-const destroyUnit = (unit: Slot): void => {
-	window.googletag?.destroySlots([unit]);
-};
-
 const handleSlotLoad = (onSlotLoad: (event: SlotLoadEvent) => void): void => {
 	window.googletag?.pubads().addEventListener("slotOnload", onSlotLoad);
 };
@@ -304,7 +300,6 @@ export const gtag = {
 	removeRewardedSlotReady,
 	removeRewardedSlotClosed,
 	removeRewardedSlotGranted,
-	destroyUnit,
 	handleSlotLoad,
 	handleSlotRequested,
 	handleSlotIsViewable,

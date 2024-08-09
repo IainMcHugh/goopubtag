@@ -11,6 +11,7 @@ import { mockGoogleTag } from "tests/mocks/googletag.mock";
 
 import type { Mapping, OutOfPage, Slot } from "lib/types";
 import { gtag } from "lib/utils/gtag";
+import { mockUnit } from "tests/mocks/unit.mock";
 
 describe("Unit | Gtag", () => {
 	beforeEach(() => {
@@ -35,63 +36,104 @@ describe("Unit | Gtag", () => {
 
 	it("should return top anchor", () => {
 		const topAnchor = gtag.getTopAnchor();
-		expect(topAnchor).toBe("top-anchor");
+		expect(topAnchor).toBeNull();
 	});
 
 	it("should return bottom anchor", () => {
 		const bottomAnchor = gtag.getBottomAnchor();
-		expect(bottomAnchor).toBe("bottom-anchor");
+		expect(bottomAnchor).toBe(1);
+	});
+
+	it("should return left rail", () => {
+		const bottomAnchor = gtag.getLeftSideRail();
+		expect(bottomAnchor).toBe(3);
+	});
+
+	it("should return right rail", () => {
+		const bottomAnchor = gtag.getRightSideRail();
+		expect(bottomAnchor).toBe(4);
 	});
 
 	it("should return rewarded", () => {
 		const rewarded = gtag.getRewarded();
-		expect(rewarded).toBe("rewarded");
+		expect(rewarded).toBe(2);
 	});
 
 	it("should get out of page slot id for anchor", () => {
 		const outOfPage: OutOfPage = {
 			type: "anchor",
-			settings: { position: "top" },
+			settings: { position: "bottom" },
 		};
 		const slotId = gtag.getOutOfPageSlotId(outOfPage);
-		expect(slotId).toBe("top-anchor");
+		expect(slotId).toBe(1);
 	});
 
 	it("should get out of page slot id for rewarded", () => {
 		const outOfPage: OutOfPage = { type: "rewarded", settings: {} };
 		const slotId = gtag.getOutOfPageSlotId(outOfPage);
-		expect(slotId).toBe("rewarded");
+		expect(slotId).toBe(2);
 	});
 
 	it("should create out of page slot", () => {
-		const slot = gtag.createOutOfPageSlot("/1234/adunit", "top-anchor");
+		const slot = gtag.createOutOfPageSlot("/1234/adunit", 1);
 		expect(slot).toBeTruthy();
 		expect(window.googletag?.defineOutOfPageSlot).toHaveBeenCalledWith(
 			"/1234/adunit",
-			"top-anchor",
+			1,
 		);
 	});
 
-	it("should handle rewarded events", () => {
-		const onReady = vi.fn();
-		const onClosed = vi.fn();
-		const onGranted = vi.fn();
-		const outOfPage: OutOfPage = {
-			type: "rewarded",
-			settings: { onReady, onClosed, onGranted },
-		};
-		gtag.handleRewarded(outOfPage);
+	it("should handle rewarded slot ready", () => {
+		const onRewardSlotReady = vi.fn();
+		gtag.handleRewardedSlotReady(onRewardSlotReady);
 		expect(window.googletag?.pubads().addEventListener).toHaveBeenCalledWith(
 			"rewardedSlotReady",
-			onReady,
+			onRewardSlotReady,
 		);
+	});
+
+	it("should handle rewarded slot closed", () => {
+		const onRewardSlotClosed = vi.fn();
+		gtag.handleRewardedSlotClosed(onRewardSlotClosed);
 		expect(window.googletag?.pubads().addEventListener).toHaveBeenCalledWith(
 			"rewardedSlotClosed",
-			onClosed,
+			onRewardSlotClosed,
 		);
+	});
+
+	it("should handle rewarded slot granted", () => {
+		const onRewardSlotGranted = vi.fn();
+		gtag.handleRewardedSlotGranted(onRewardSlotGranted);
 		expect(window.googletag?.pubads().addEventListener).toHaveBeenCalledWith(
 			"rewardedSlotGranted",
-			onGranted,
+			onRewardSlotGranted,
+		);
+	});
+
+	it("should handle remove rewarded slot ready", () => {
+		const onRewardSlotReady = vi.fn();
+		gtag.removeRewardedSlotReady(onRewardSlotReady);
+		expect(window.googletag?.pubads().removeEventListener).toHaveBeenCalledWith(
+			"rewardedSlotReady",
+			onRewardSlotReady,
+		);
+	});
+
+	it("should handle remove rewarded slot closed", () => {
+		const onRewardSlotClosed = vi.fn();
+		gtag.removeRewardedSlotClosed(onRewardSlotClosed);
+		expect(window.googletag?.pubads().removeEventListener).toHaveBeenCalledWith(
+			"rewardedSlotClosed",
+			onRewardSlotClosed,
+		);
+	});
+
+	it("should handle remove rewarded slot granted", () => {
+		const onRewardSlotGranted = vi.fn();
+		gtag.removeRewardedSlotGranted(onRewardSlotGranted);
+		expect(window.googletag?.pubads().removeEventListener).toHaveBeenCalledWith(
+			"rewardedSlotGranted",
+			onRewardSlotGranted,
 		);
 	});
 
@@ -228,10 +270,52 @@ describe("Unit | Gtag", () => {
 		);
 	});
 
+	it("should handle remove slot load", () => {
+		const onSlotLoad = vi.fn();
+		gtag.removeSlotLoad(onSlotLoad);
+		expect(window.googletag?.pubads().removeEventListener).toHaveBeenCalledWith(
+			"slotOnload",
+			onSlotLoad,
+		);
+	});
+
+	it("should handle remove slot requested", () => {
+		const onSlotRequested = vi.fn();
+		gtag.removeSlotRequested(onSlotRequested);
+		expect(window.googletag?.pubads().removeEventListener).toHaveBeenCalledWith(
+			"slotRequested",
+			onSlotRequested,
+		);
+	});
+
+	it("should handle remove slot is viewable", () => {
+		const onSlotIsViewable = vi.fn();
+		gtag.removeSlotIsViewable(onSlotIsViewable);
+		expect(window.googletag?.pubads().removeEventListener).toHaveBeenCalledWith(
+			"impressionViewable",
+			onSlotIsViewable,
+		);
+	});
+
+	it("should handle remove slot render ended", () => {
+		const onSlotRenderEnded = vi.fn();
+		gtag.removeSlotRenderEnded(onSlotRenderEnded);
+		expect(window.googletag?.pubads().removeEventListener).toHaveBeenCalledWith(
+			"slotRenderEnded",
+			onSlotRenderEnded,
+		);
+	});
+
 	it("should enable service and display slot", () => {
 		gtag.enableService("slot1");
 		expect(window.googletag?.enableServices).toHaveBeenCalled();
 		expect(window.googletag?.display).toHaveBeenCalledWith("slot1");
+	});
+
+	it("should enable out of page services", () => {
+		gtag.enableOutOfPageService(mockUnit.unit);
+		expect(window.googletag?.enableServices).toHaveBeenCalled();
+		expect(window.googletag?.display).toHaveBeenCalledWith(mockUnit.unit);
 	});
 
 	it("should enable single request", () => {
@@ -244,12 +328,15 @@ describe("Unit | Gtag", () => {
 		expect(window.googletag?.pubads().enableLazyLoad).toHaveBeenCalled();
 	});
 
-	it("should handle slot render ended", () => {
-		const onSlotRenderEnded = vi.fn();
-		gtag.handleSlotRenderEnded(onSlotRenderEnded);
-		expect(window.googletag?.pubads().addEventListener).toHaveBeenCalledWith(
-			"slotRenderEnded",
-			onSlotRenderEnded,
+	it("should enable lazy load with config", () => {
+		const mockConfig = {
+			fetchMarginPercent: 1,
+			mobileScaling: 1,
+			renderMarginPercent: 1,
+		};
+		gtag.enableLazyLoad(mockConfig);
+		expect(window.googletag?.pubads().enableLazyLoad).toHaveBeenCalledWith(
+			mockConfig,
 		);
 	});
 });

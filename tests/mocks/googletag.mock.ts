@@ -39,6 +39,7 @@ export const mockGoogleTag: GoogleTag = {
 	openConsole: vi.fn(),
 	pubads: vi.fn().mockReturnValue({
 		addEventListener: vi.fn(),
+		removeEventListener: vi.fn(),
 		collapseEmptyDivs: vi.fn(),
 		setTargeting: vi.fn(),
 		clearTargeting: vi.fn(),
