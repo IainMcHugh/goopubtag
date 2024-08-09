@@ -14,12 +14,7 @@ type GoogleTag = {
 	};
 	companionAds: unknown;
 	content: unknown;
-	defineOutOfPageSlot: (
-		adUnitPath: string,
-		slotId: string | null,
-	) => {
-		addService: (slot: Slot) => Slot;
-	};
+	defineOutOfPageSlot: (adUnitPath: string, variant: number | null) => Slot;
 	defineSlot: (
 		adUnitPath: string,
 		sizes: Sizes,
@@ -28,9 +23,9 @@ type GoogleTag = {
 		addService: (slot: Slot) => Slot;
 	};
 	defineUnit: unknown;
-	destroySlots: unknown;
+	destroySlots: (slots: Array<Slot>) => void;
 	disablePublisherConsole: unknown;
-	display: (slotId: string) => void;
+	display: (slotId: string | Slot) => void;
 	enableServices: () => void;
 	evalScripts: unknown;
 	getEventLog: unknown;
@@ -44,9 +39,12 @@ type GoogleTag = {
 	sizeMapping: () => Mapping;
 	enums: {
 		OutOfPageFormat: {
-			TOP_ANCHOR: string;
-			BOTTOM_ANCHOR: string;
-			REWARDED: string;
+			TOP_ANCHOR: number;
+			BOTTOM_ANCHOR: number;
+			REWARDED: number;
+			RIGHT_SIDE_RAIL: number;
+			LEFT_SIDE_RAIL: number;
+			INTERSTITIAL: number;
 		};
 	};
 	encryptedSignalProviders: unknown;

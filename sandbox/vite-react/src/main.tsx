@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import { config } from "./Config";
@@ -11,6 +11,7 @@ const routes = config.map((x) => ({
 
 const router = createBrowserRouter(routes);
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+ReactDOM.render(
 	<RouterProvider router={router} />,
+	document.getElementById("root"),
 );

@@ -77,32 +77,66 @@ export type CollapseSlot = Collapse | "expand_strict";
 
 export type Collapse = "default" | "expand" | "collapse";
 
-export type AnchorSettings = Pick<SlotUnit, "adUnit" | "targetingArguments"> & {
+type OutOfPageExtra = Pick<
+	SlotUnit,
+	| "adUnit"
+	| "targetingArguments"
+	| "onSlotLoad"
+	| "onSlotRequested"
+	| "onSlotIsViewable"
+	| "onSlotRenderEnded"
+> & {
+	/**
+	 * If a combination of out of page ads and static ads are used, this should be `true`.
+	 */
+	withStaticAds?: boolean;
+};
+
+type AnchorOutOfPage = {
+	type: "anchor";
+	settings: AnchorSettings;
+};
+
+export type AnchorSettings = {
 	position: "top" | "bottom";
 };
 
-type RewardedOnReadyEvent = {
+type RewardedOutOfPage = { type: "rewarded"; settings: RewardedSettings };
+
+export type RewardedOnReadyEvent = {
 	makeRewardedVisible: () => void;
 };
 
-export type RewardedSettings = Pick<
-	SlotUnit,
-	"adUnit" | "targetingArguments"
-> & {
+export type RewardedOnCloseEvent = unknown;
+
+export type RewardedOnGrantedEvent = {
+	payload: {
+		amount: string;
+		type: string;
+	};
+};
+
+export type RewardedSettings = {
 	onReady?: (event: RewardedOnReadyEvent) => void;
 	onClosed?: (event: unknown) => void;
-	onGranted?: (event: unknown) => void;
+	onGranted?: (event: RewardedOnGrantedEvent) => void;
+};
+
+type RailOutOfPage = {
+	type: "rail";
+	settings: RailSettings;
+};
+
+export type RailSettings = {
+	position: "left" | "right";
 };
 
 export type OutOfPageTypes =
-	| {
-			type: "anchor";
-			settings: AnchorSettings;
-	  }
-	| { type: "rewarded"; settings: RewardedSettings };
+	| AnchorOutOfPage
+	| RewardedOutOfPage
+	| RailOutOfPage;
 
-export type OutOfPage = Pick<SlotUnit, "adUnit" | "targetingArguments"> &
-	OutOfPageTypes;
+export type OutOfPage = OutOfPageExtra & OutOfPageTypes;
 
 export type Mapping = {
 	addSize: (viewport: Size, sizes: Sizes) => Mapping;
@@ -127,12 +161,12 @@ export type LazyLoad = {
 	mobileScaling: number;
 };
 
-type SlotRender = {
+type SlotRender = Slot & {
 	// complete
 	getSlotElementId: () => string;
 };
 
-type SlotVisibilityChanged = {
+type SlotVisibilityChanged = Slot & {
 	// complete
 	getSlotElementId: () => string;
 };
@@ -236,10 +270,6 @@ export type SlotUnit<A extends UnitTargeting = UnitTargeting> = GPT<
 	 * The ad sizes that can be served for the viewport size provided
 	 */
 	sizes: Sizes;
-	/**
-	 * Constructs an out-of-page ad slot with the given ad unit path.
-	 */
-	outOfPage?: boolean;
 	/**
 	 * **This is different behaviour to the `fallback` prop in the GPTProvider**
 	 * Defines the fallback behaviour for when an ad fails to load. The 3 options are:

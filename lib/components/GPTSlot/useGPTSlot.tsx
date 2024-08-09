@@ -1,9 +1,10 @@
-import { type CSSProperties, useEffect } from "react";
+import { type CSSProperties, useEffect, useRef } from "react";
 
 import type { Slot } from "../../types";
 import { gtag } from "../../utils/gtag";
 import { useGPTContext } from "../GPTProvider/GPTProvider";
 import type { UseGPTSlotProps } from "./GPTSlot.type";
+import type { Unit } from "../GPTProvider/GPTProvider.type";
 import { subscribe, unsubscribe } from "../../utils/events";
 
 const useGPTSlot = (props: UseGPTSlotProps) => {
@@ -18,92 +19,91 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 		onSlotIsViewable,
 		onSlotRenderEnded,
 		fallback = "default",
-		outOfPage = false,
 	} = props;
 	const { networkId, units, lazyLoad, singleRequest, addUnit } =
 		useGPTContext();
 	const adUnitPath = gtag.getAdUnitPath(networkId, adUnit);
+	const unitRef = useRef<Unit>();
 
 	useEffect(() => {
 		gtag.init();
 		gtag.push(() => {
 			let unit: Slot | null = null;
-			const isAlreadyDefined = units?.find((u) => u.slotId === slotId);
+			const isAlreadyDefined =
+				unitRef.current || units?.find((u) => u.slotId === slotId);
 
-			if (isAlreadyDefined) return;
-
-			if (outOfPage) {
-				unit = gtag.createOutOfPageSlot(adUnitPath, slotId);
-			} else {
+			if (!isAlreadyDefined) {
 				unit = gtag.createSlot(adUnitPath, sizes, slotId);
-			}
-			if (unit !== null) {
-				if (sizeMapping) {
-					const mappingBuilder = gtag.getMapping();
-					for (const { viewport, sizes } of sizeMapping) {
-						mappingBuilder.addSize(viewport, sizes);
-					}
-					const mapping = mappingBuilder.build();
-					unit.defineSizeMapping(mapping);
-				}
 
-				if (targetingArguments) {
-					for (const targetingKey of Object.keys(targetingArguments)) {
-						unit.setTargeting(targetingKey, targetingArguments[targetingKey]);
+				if (unit !== null) {
+					if (sizeMapping) {
+						const mappingBuilder = gtag.getMapping();
+						for (const { viewport, sizes } of sizeMapping) {
+							mappingBuilder.addSize(viewport, sizes);
+						}
+						const mapping = mappingBuilder.build();
+						unit.defineSizeMapping(mapping);
 					}
-				}
-				if (lazyLoad !== undefined) {
-					gtag.enableLazyLoad(lazyLoad);
-				}
 
-				if (onSlotLoad) {
-					subscribe("slot_load", (event) => {
-						const id = event.slot.getSlotElementId();
-						if (id === slotId) onSlotLoad(event);
-					});
-				}
-				if (onSlotRequested) {
-					subscribe("slot_requested", (event) => {
-						const id = event.slot.getSlotElementId();
-						if (id === slotId) onSlotRequested(event);
-					});
-				}
-				if (onSlotIsViewable) {
-					subscribe("impression_viewable", (event) => {
-						const id = event.slot.getSlotElementId();
-						if (id === slotId) onSlotIsViewable(event);
-					});
-				}
-				if (onSlotRenderEnded) {
-					subscribe("slot_render_ended", (event) => {
-						const id = event.slot.getSlotElementId();
-						if (id === slotId) onSlotRenderEnded(event);
-					});
-				}
-
-				if (fallback && fallback !== "default") {
-					switch (fallback) {
-						case "expand": {
-							unit.setCollapseEmptyDiv(true, true);
-							break;
+					if (targetingArguments) {
+						for (const targetingKey of Object.keys(targetingArguments)) {
+							unit.setTargeting(targetingKey, targetingArguments[targetingKey]);
 						}
-						case "expand_strict": {
-							unit.setCollapseEmptyDiv(false);
-							break;
-						}
-						case "collapse": {
-							unit.setCollapseEmptyDiv(true);
-							break;
-						}
-						default:
-							break;
 					}
+					if (lazyLoad !== undefined) {
+						gtag.enableLazyLoad(lazyLoad);
+					}
+
+					if (onSlotLoad) {
+						subscribe("slot_load", (event) => {
+							const id = event.slot.getSlotElementId();
+							if (id === slotId) onSlotLoad(event);
+						});
+					}
+					if (onSlotRequested) {
+						subscribe("slot_requested", (event) => {
+							const id = event.slot.getSlotElementId();
+							if (id === slotId) onSlotRequested(event);
+						});
+					}
+					if (onSlotIsViewable) {
+						subscribe("impression_viewable", (event) => {
+							const id = event.slot.getSlotElementId();
+							if (id === slotId) onSlotIsViewable(event);
+						});
+					}
+					if (onSlotRenderEnded) {
+						subscribe("slot_render_ended", (event) => {
+							const id = event.slot.getSlotElementId();
+							if (id === slotId) onSlotRenderEnded(event);
+						});
+					}
+
+					if (fallback && fallback !== "default") {
+						switch (fallback) {
+							case "expand": {
+								unit.setCollapseEmptyDiv(true, true);
+								break;
+							}
+							case "expand_strict": {
+								unit.setCollapseEmptyDiv(false);
+								break;
+							}
+							case "collapse": {
+								unit.setCollapseEmptyDiv(true);
+								break;
+							}
+							default:
+								break;
+						}
+					}
+					unitRef.current = { slotId, unit };
+					slotId && addUnit({ slotId, unit });
+					if (singleRequest) {
+						gtag.enableSingleRequest();
+					}
+					gtag.enableService(slotId);
 				}
-				slotId && addUnit({ slotId, unit });
-				if (singleRequest) {
-					gtag.enableSingleRequest();
-				}
-				gtag.enableService(slotId);
 			}
 		});
 
@@ -117,7 +117,6 @@ const useGPTSlot = (props: UseGPTSlotProps) => {
 				unsubscribe("slot_render_ended", onSlotRenderEnded);
 		};
 	}, [
-		outOfPage,
 		targetingArguments,
 		sizeMapping,
 		slotId,

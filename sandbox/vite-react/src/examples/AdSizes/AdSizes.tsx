@@ -1,7 +1,8 @@
 import React from "react";
 import { GPTProvider, GPTSlot, GUIDELINES } from "../../../../../dist";
+import type { Styles } from "../../Config";
 
-const { UNIT_SIZE, SCREEN_SIZE } = GUIDELINES;
+const { UNIT_SIZE } = GUIDELINES;
 
 const AdSizes = () => {
 	return (
@@ -11,17 +12,19 @@ const AdSizes = () => {
 	);
 };
 
+const styles = {
+	base: {
+		border: "solid",
+		width: "100%",
+	},
+} satisfies Styles;
+
 const Component = () => {
 	return (
 		<div>
 			<h1>Fixed size ad slot</h1>
 			<p>This ad slot will display an ad sized 300x250.</p>
-			<div
-				style={{
-					border: "solid",
-					width: "100%",
-				}}
-			>
+			<div style={styles.base}>
 				<GPTSlot
 					adUnit="Travel/Europe/France/Paris"
 					slotId="banner-ad"
@@ -33,12 +36,7 @@ const Component = () => {
 				This ad slot will display an ad with any of the following dimensions:
 				300x250, 728x90, 750x200.
 			</p>
-			<div
-				style={{
-					border: "solid",
-					width: "100%",
-				}}
-			>
+			<div style={styles.base}>
 				<GPTSlot
 					adUnit="Travel/Europe"
 					slotId="multi-size-ad"
@@ -56,13 +54,7 @@ const Component = () => {
 				displayed. For this example, the slot is limited to 50% of the width of
 				its parent container.
 			</p>
-			<div
-				style={{
-					border: "solid",
-					width: "100%",
-				}}
-			>
-				<div id="native-ad" className="ad-slot native-slot" />
+			<div style={styles.base}>
 				<GPTSlot
 					adUnit="Travel/Europe"
 					slotId="native-ad"
@@ -85,12 +77,7 @@ const Component = () => {
 				</li>
 				<li>When viewport &lt; 640x480, no ads may be displayed.</li>
 			</ul>
-			<div
-				style={{
-					border: "solid",
-					width: "100%",
-				}}
-			>
+			<div style={styles.base}>
 				<GPTSlot
 					adUnit="Travel/Europe"
 					slotId="responsive-ad"

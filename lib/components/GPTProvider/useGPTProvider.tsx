@@ -1,6 +1,13 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import type { Attributes, SlotLoadEvent, SlotProvider } from "../../types";
+import type {
+	Attributes,
+	SlotLoadEvent,
+	SlotProvider,
+	SlotRenderEndedEvent,
+	SlotRequestEvent,
+	SlotViewableEvent,
+} from "../../types";
 import { getGPTScript } from "../../utils";
 import { dispatchEvent } from "../../utils/events";
 import { gtag } from "../../utils/gtag";
@@ -15,6 +22,7 @@ const useGPTProvider = <PageAttributes extends Attributes>(
 	props: SlotProvider<PageAttributes>,
 ): UseGPTProvider => {
 	const [units, setUnits] = useState<Unit[]>([]);
+	const [outOfPageUnits, setOutOfPageUnits] = useState<Unit[]>([]);
 	const {
 		networkId,
 		limitedAds = false,
@@ -23,7 +31,31 @@ const useGPTProvider = <PageAttributes extends Attributes>(
 		outOfPage,
 	} = props;
 
-	const addUnit = (unit: Unit) => setUnits((prev) => [...prev, unit]);
+	const addOutOfPageUnit = useCallback(
+		(unit: Unit) => setOutOfPageUnits((prev) => [...prev, unit]),
+		[],
+	);
+
+	const addUnit = useCallback(
+		(unit: Unit) => setUnits((prev) => [...prev, unit]),
+		[],
+	);
+
+	const slotLoadEvent = useCallback((detail: SlotLoadEvent) => {
+		dispatchEvent("slot_load", detail);
+	}, []);
+
+	const slotRequestedEventt = useCallback((detail: SlotRequestEvent) => {
+		dispatchEvent("slot_requested", detail);
+	}, []);
+
+	const slotIsViewableEvent = useCallback((detail: SlotViewableEvent) => {
+		dispatchEvent("impression_viewable", detail);
+	}, []);
+
+	const slotRenderEndedEvent = useCallback((detail: SlotRenderEndedEvent) => {
+		dispatchEvent("slot_render_ended", detail);
+	}, []);
 
 	useEffect(() => {
 		const gptScript = getGPTScript({ limitedAds });
@@ -31,56 +63,102 @@ const useGPTProvider = <PageAttributes extends Attributes>(
 	}, [limitedAds]);
 
 	useEffect(() => {
-		gtag.init();
-		gtag.push(() => {
-			if (outOfPage) {
-				const { settings } = outOfPage;
-				// TODO: figure out how to test anchor
-				const adUnitPath = gtag.getAdUnitPath(networkId, settings.adUnit);
-				const unit = gtag.createOutOfPageSlot(
-					adUnitPath,
-					gtag.getOutOfPageSlotId(outOfPage),
-				);
+		const isAlreadyDefined = outOfPageUnits.find(
+			(u) => u.slotId === outOfPage?.type,
+		);
+		if (!isAlreadyDefined) {
+			gtag.init();
+			gtag.push(() => {
+				if (outOfPage) {
+					const outOfPageUnit = gtag.createOutOfPageSlot(
+						gtag.getAdUnitPath(networkId, outOfPage.adUnit),
+						gtag.getOutOfPageSlotId(outOfPage),
+					);
 
-				if (unit && settings.targetingArguments) {
-					for (const targetingKey of Object.keys(settings.targetingArguments)) {
-						unit.setTargeting(
-							targetingKey,
-							settings.targetingArguments[targetingKey],
-						);
+					if (outOfPageUnit) {
+						if (outOfPage.targetingArguments) {
+							for (const targetingKey of Object.keys(
+								outOfPage.targetingArguments,
+							)) {
+								outOfPageUnit.setTargeting(
+									targetingKey,
+									outOfPage.targetingArguments[targetingKey],
+								);
+							}
+						}
+
+						if (outOfPage.onSlotLoad) {
+							gtag.handleSlotLoad(outOfPage.onSlotLoad);
+						}
+
+						if (outOfPage.onSlotRequested) {
+							gtag.handleSlotRequested(outOfPage.onSlotRequested);
+						}
+
+						if (outOfPage.onSlotIsViewable) {
+							gtag.handleSlotIsViewable(outOfPage.onSlotIsViewable);
+						}
+
+						if (outOfPage.onSlotRenderEnded) {
+							gtag.handleSlotRenderEnded(outOfPage.onSlotRenderEnded);
+						}
+
+						if (outOfPage.type === "rewarded" && outOfPage.settings.onReady) {
+							gtag.handleRewardedSlotReady(outOfPage.settings.onReady);
+						}
+
+						if (outOfPage.type === "rewarded" && outOfPage.settings.onClosed) {
+							gtag.handleRewardedSlotClosed(outOfPage.settings.onClosed);
+						}
+
+						if (outOfPage.type === "rewarded" && outOfPage.settings.onGranted) {
+							gtag.handleRewardedSlotGranted(outOfPage.settings.onGranted);
+						}
+
+						gtag.addService(outOfPageUnit);
+						/**
+						 * If static ads are also defined, we should wait for their display call instead.
+						 */
+						if (!outOfPage.withStaticAds) {
+							gtag.enableOutOfPageService(outOfPageUnit);
+						}
+						addOutOfPageUnit({ slotId: outOfPage.type, unit: outOfPageUnit });
 					}
-
-					gtag.addService(unit);
-
-					gtag.handleRewarded(outOfPage);
 				}
-			}
 
-			if (targetingArguments) {
-				for (const targetingKey of Object.keys(targetingArguments)) {
-					gtag.setTargeting(targetingKey, targetingArguments[targetingKey]);
+				if (targetingArguments) {
+					for (const targetingKey of Object.keys(targetingArguments)) {
+						gtag.setTargeting(targetingKey, targetingArguments[targetingKey]);
+					}
 				}
-			}
 
-			gtag.handleSlotLoad((detail) => {
-				dispatchEvent("slot_load", detail);
+				gtag.handleSlotLoad(slotLoadEvent);
+				gtag.handleSlotRequested(slotRequestedEventt);
+				gtag.handleSlotIsViewable(slotIsViewableEvent);
+				gtag.handleSlotRenderEnded(slotRenderEndedEvent);
+
+				gtag.handleFallback(fallback);
 			});
+		}
 
-			gtag.handleSlotRequested((detail) => {
-				dispatchEvent("slot_requested", detail);
-			});
-
-			gtag.handleSlotIsViewable((detail) => {
-				dispatchEvent("impression_viewable", detail);
-			});
-
-			gtag.handleSlotRenderEnded((detail) => {
-				dispatchEvent("slot_render_ended", detail);
-			});
-
-			gtag.handleFallback(fallback);
-		});
-	}, [fallback, outOfPage, targetingArguments, networkId]);
+		return () => {
+			gtag.removeSlotLoad(slotLoadEvent);
+			gtag.removeSlotRequested(slotRequestedEventt);
+			gtag.removeSlotIsViewable(slotIsViewableEvent);
+			gtag.removeSlotRenderEnded(slotRenderEndedEvent);
+		};
+	}, [
+		fallback,
+		outOfPage,
+		targetingArguments,
+		networkId,
+		outOfPageUnits,
+		addOutOfPageUnit,
+		slotLoadEvent,
+		slotRequestedEventt,
+		slotIsViewableEvent,
+		slotRenderEndedEvent,
+	]);
 
 	return {
 		units,

@@ -7,6 +7,8 @@ import type {
 	SlotRequestEvent,
 	SlotRenderEndedEvent,
 	SlotViewableEvent,
+	RewardedOnReadyEvent,
+	RewardedOnGrantedEvent,
 } from "./types";
 
 import { GPTProvider } from "./components/GPTProvider/GPTProvider";
@@ -21,6 +23,8 @@ export type {
 	SlotRequestEvent,
 	SlotViewableEvent,
 	SlotRenderEndedEvent,
+	RewardedOnReadyEvent,
+	RewardedOnGrantedEvent,
 	Sizes,
 	Size,
 };
