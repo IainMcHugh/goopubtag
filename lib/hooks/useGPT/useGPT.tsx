@@ -108,27 +108,7 @@ const useGPT = <
 		});
 	};
 
-	/**
-	 * This function when called will either:
-	 *
-	 * - refresh all ad slots (no parameter)
-	 * - refresh only the ad slots provided
-	 *
-	 * @param adSlots The list of ad slot(s)
-	 * @returns
-	 */
-	const refresh = <AdSlots extends string[] = string[]>(adSlots?: AdSlots) => {
-		gtag.push(() => {
-			if (adSlots && adSlots.length !== 0) {
-				gtag.refresh(adSlots);
-			} else {
-				gtag.refresh();
-			}
-		});
-	};
-
 	return {
-		refresh,
 		setTargetingAttributes,
 		setPageTargetingAttributes,
 		clearTargetingAttributes,

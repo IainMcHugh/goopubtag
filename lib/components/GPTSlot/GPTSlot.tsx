@@ -1,13 +1,21 @@
-import { memo } from "react";
+import { memo, useEffect } from "react";
 import type { UnitTargeting } from "../../types";
 import type { GPTSlotProps } from "./GPTSlot.type";
 import { useGPTSlot } from "./useGPTSlot";
+import { destroySlots } from "lib/utils/utils";
 
 const UnMemoizedGPTSlot = <A extends UnitTargeting = UnitTargeting>(
 	props: GPTSlotProps<A>,
 ): JSX.Element => {
 	const { slotId, className, dataTestId } = props;
 	const { style } = useGPTSlot(props);
+
+	useEffect(() => {
+		return () => {
+			/** Cleanup */
+			destroySlots([slotId]);
+		};
+	}, []);
 	return (
 		<div
 			id={slotId}

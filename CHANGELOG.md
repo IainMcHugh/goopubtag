@@ -1,5 +1,35 @@
 # goopubtag
 
+## 0.4.4
+
+### Patch Changes
+
+- Destroy slot once unmounted
+
+## 0.4.3
+
+### Patch Changes
+
+- Add docs to Next.js usage
+
+## 0.4.2
+
+### Patch Changes
+
+- Update the docs link
+
+## 0.4.1
+
+### Patch Changes
+
+- 7ee82a9: Move refresh and destroySlots functions to utils
+
+## 0.4.0
+
+### Minor Changes
+
+- 4bbb896: Add destroySlots function to manage ad slots in useGPT hook
+
 ## 0.3.0
 
 ### Minor Changes

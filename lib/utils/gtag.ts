@@ -280,6 +280,10 @@ const enableLazyLoad = (lazyLoad: boolean | LazyLoad): void => {
 	}
 };
 
+const destroySlots = (slotIds?: string[]): void => {
+	window.googletag?.destroySlots(slotIds);
+};
+
 export const gtag = {
 	init,
 	push,
@@ -317,4 +321,5 @@ export const gtag = {
 	enableOutOfPageService,
 	enableSingleRequest,
 	enableLazyLoad,
+	destroySlots,
 };

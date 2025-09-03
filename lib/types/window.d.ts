@@ -23,7 +23,7 @@ type GoogleTag = {
 		addService: (slot: Slot) => Slot;
 	};
 	defineUnit: unknown;
-	destroySlots: (slots: Array<Slot>) => void;
+	destroySlots: (slots?: Array<Slot>) => void;
 	disablePublisherConsole: unknown;
 	display: (slotId: string | Slot) => void;
 	enableServices: () => void;
